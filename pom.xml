@@ -12,4 +12,11 @@
 	<artifactId>com.springinpractice.13_01</artifactId>
 	<packaging>pom</packaging>
 	<name>Spring in Practice Recipe 13.1</name>
+	<description>
+		Recipe 13.1 shows how to do a point-to-point integration using a RESTful web service and a REST client.
+	</description>
+	<modules>
+		<module>helpdesk</module>
+		<module>portal</module>
+	</modules>
 </project>
