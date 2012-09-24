@@ -25,7 +25,6 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath:/spring/beans-service.xml
-			classpath:/spring/beans-integration.xml
 		</param-value>
 	</context-param>
 	

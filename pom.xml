@@ -4,17 +4,26 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
+	
 	<parent>
 		<groupId>com.springinpractice</groupId>
 		<artifactId>com.springinpractice.top</artifactId>
 		<version>1.0-RELEASE</version>
 	</parent>
+	
 	<artifactId>com.springinpractice.13_01</artifactId>
 	<packaging>pom</packaging>
+	
 	<name>Spring in Practice Recipe 13.1</name>
 	<description>
 		Recipe 13.1 shows how to do a point-to-point integration using a RESTful web service and a REST client.
 	</description>
+	
+	<properties>
+		<chapter.number>13</chapter.number>
+		<chapter.conf.dir>${sip.conf.dir}/sip${chapter.number}</chapter.conf.dir>
+	</properties>
+	
 	<modules>
 		<module>helpdesk</module>
 		<module>portal</module>
