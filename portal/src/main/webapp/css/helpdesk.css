@@ -1,0 +1,41 @@
+.hero-unit {
+	background-color: #DBE5E8;
+}
+
+#home-hero-unit {
+	padding-left: 210px;
+	background-image: url(../icons/vistaico/help.png);
+	background-position: -70px;
+	background-repeat: no-repeat;
+}
+
+section {
+	margin: 30px 0;
+}
+
+
+/* ICONS ============================================================================================================ */
+
+.iconx {
+	padding-left: 20px;
+	background-position: left;
+	background-repeat: no-repeat;
+}
+
+.iconx.calendar { background-image: url(../icons/fugue/calendar.png); }
+.iconx.leaf { background-image: url(../icons/fugue/leaf.png); }
+.iconx.user { background-image: url(../icons/fugue/user.png); }
+.iconx.warning { background-image: url(../icons/fugue/exclamation.png); }
+
+.iconx24 {
+	padding-left: 28px;
+	background-position: left;
+	background-repeat: no-repeat;
+}
+
+.iconx24.alarm-clock { background-image: url(../icons/fugue/24/alarm-clock.png); }
+.iconx24.database { background-image: url(../icons/fugue/24/database.png); }
+.iconx24.document { background-image: url(../icons/fugue/24/document.png); }
+.iconx24.question { background-image: url(../icons/fugue/24/question.png); }
+.iconx24.tick { background-image: url(../icons/fugue/24/tick.png); }
+.iconx24.ticket { background-image: url(../icons/fugue/24/ticket.png); }

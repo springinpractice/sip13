@@ -5,13 +5,17 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	
+	<!--
 	<parent>
 		<groupId>com.springinpractice</groupId>
 		<artifactId>com.springinpractice.top</artifactId>
 		<version>1.0-RELEASE</version>
 	</parent>
+	-->
 	
+	<groupId>com.springinpractice</groupId>
 	<artifactId>com.springinpractice.13_01</artifactId>
+	<version>1.0-RELEASE</version>
 	<packaging>pom</packaging>
 	
 	<name>Spring in Practice Recipe 13.1</name>
@@ -19,13 +23,298 @@
 		Recipe 13.1 shows how to do a point-to-point integration using a RESTful web service and a REST client.
 	</description>
 	
-	<properties>
-		<chapter.number>13</chapter.number>
-		<chapter.conf.dir>${sip.conf.dir}/sip${chapter.number}</chapter.conf.dir>
-	</properties>
-	
 	<modules>
 		<module>helpdesk</module>
 		<module>portal</module>
 	</modules>
+	
+	<properties>
+	
+		<!-- Chapter metadata -->
+		<chapter.number>13</chapter.number>
+		<chapter.conf.dir>${sip.conf.dir}/sip${chapter.number}</chapter.conf.dir>
+		
+		<!-- Dependency versions -->
+		<apache.commons.dbcp.version>1.4</apache.commons.dbcp.version>
+		<hibernate.validator.version>4.3.0.Final</hibernate.validator.version>
+		<javax.inject.version>1</javax.inject.version>
+		<javax.servlet.api.version>2.5</javax.servlet.api.version>
+		<javax.servlet.jstl.version>1.2</javax.servlet.jstl.version>
+		<javax.validation.api.version>1.0.0.GA</javax.validation.api.version>
+		<mysql.connector.version>5.1.21</mysql.connector.version>
+		<slf4j.version>1.6.6</slf4j.version>
+		<spring.data.commons.version>1.4.0.RC1</spring.data.commons.version>
+		<spring.data.jpa.version>1.2.0.RC1</spring.data.jpa.version>
+		<spring.data.rest.webmvc.version>1.0.0.RC3</spring.data.rest.webmvc.version>
+		<spring.version>3.1.2.RELEASE</spring.version>
+		<tiles.version>2.2.2</tiles.version>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			
+			<!-- Java -->
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>${javax.inject.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${javax.servlet.jstl.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>${javax.servlet.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>${javax.validation.api.version}</version>
+			</dependency>
+			
+			<!-- Spring -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-asm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-expression</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-oxm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			
+			<!-- Spring Data -->
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-commons-core</artifactId>
+				<version>${spring.data.commons.version}</version>
+	        </dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${spring.data.jpa.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-rest-webmvc</artifactId>
+				<version>${spring.data.rest.webmvc.version}</version>
+			</dependency>
+			
+			<!-- Hibernate -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>${hibernate.validator.version}</version>
+			</dependency>
+			
+			<!-- Apache Commons -->
+			<dependency>
+				<groupId>commons-dbcp</groupId>
+				<artifactId>commons-dbcp</artifactId>
+				<version>${apache.commons.dbcp.version}</version>
+			</dependency>
+			
+			<!-- Apache Tiles -->
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-core</artifactId>
+				<version>${tiles.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-el</artifactId>
+				<version>${tiles.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-jsp</artifactId>
+				<version>${tiles.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-servlet</artifactId>
+				<version>${tiles.version}</version>
+			</dependency>
+			
+			<!-- Logging dependencies -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			
+			<!-- Other -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.connector.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	
+	<!-- =========================================================================================================== -->
+	<!-- Build                                                                                                       -->
+	<!-- =========================================================================================================== -->
+	
+	<build>
+		<pluginManagement>
+			<plugins>				
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.5.1</version>
+					<configuration>
+						<!-- Note: Moved these out of compilerArguments -->
+						<source>1.6</source>
+						<target>1.6</target>
+						<compilerArguments>
+							<verbose />
+						</compilerArguments>
+					</configuration>
+				</plugin>
+				
+				<!-- This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>build-helper-maven-plugin</artifactId>
+										<versionRange>[1.5,)</versionRange>
+										<goals>
+											<goal>add-test-resource</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+				
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>maven-jetty-plugin</artifactId>
+					<version>6.1.21</version>
+					<configuration>
+						<scanIntervalSeconds>10</scanIntervalSeconds>
+						<webAppConfig>
+							<contextPath>/sip</contextPath>
+							<extraClasspath>${sip.conf.dir}/sip${chapter.number}/classes</extraClasspath>
+						</webAppConfig>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	
+	
+	<!-- =========================================================================================================== -->
+	<!-- Repositories                                                                                                -->
+	<!-- =========================================================================================================== -->
+	
+	<repositories>
+		
+		<!-- Spring repos (spring-* dependencies; e.g., Spring Integration) -->
+		<repository>
+			<id>spring-release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://repo.springsource.org/libs-release</url>
+		</repository> 
+		<repository>
+			<id>spring-milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://repo.springsource.org/libs-milestone</url>
+		</repository>
+		<repository>
+			<id>spring-snapshot</id>
+			<name>Spring Maven Snapshot Repository</name>
+			<url>http://repo.springsource.org/libs-snapshot</url>
+		</repository>
+    </repositories>
 </project>

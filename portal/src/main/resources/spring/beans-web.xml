@@ -26,13 +26,8 @@ Willie Wheeler (willie.wheeler@gmail.com)
 	<mvc:default-servlet-handler />
 	
 	<mvc:view-controller path="/" view-name="home" />
-	<mvc:view-controller path="/knowledgebase" view-name="knowledgeBase" />
-	<mvc:view-controller path="/approvals" view-name="approvals" />
-	<mvc:view-controller path="/tasks" view-name="tasks" />
-	<mvc:view-controller path="/surveys" view-name="surveys" />
-	<mvc:view-controller path="/reporting" view-name="reporting" />
 	
-	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.web.controller" />
+	<context:component-scan base-package="com.springinpractice.ch13.portal.web.controller" />
 	
 	
 	<!-- =========================================================================================================== -->
