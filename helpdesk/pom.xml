@@ -31,11 +31,29 @@
 			<version>1.0-RELEASE</version>
 			<type>pom</type>
 		</dependency>
+		
+		<!-- Spring -->
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>com.springinpractice.skin</artifactId>
-			<version>1.0-RELEASE</version>
-			<type>war</type>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-rest-webmvc</artifactId>
+		</dependency>
+		
+		<!-- Tiles -->
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-el</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-jsp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-servlet</artifactId>
 		</dependency>
 	</dependencies>
 

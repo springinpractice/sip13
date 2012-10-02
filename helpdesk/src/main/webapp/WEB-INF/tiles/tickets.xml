@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+		"-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+		"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+	<definition name="ticketsHome" extends="pageTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/tickets/ticketsHome.jsp" />
+	</definition>
+	<definition name="ticketList" extends="pageTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/tickets/ticketList.jsp" />
+	</definition>
+	<definition name="newTicket" extends="pageTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/tickets/newTicket.jsp" />
+	</definition>
+</tiles-definitions>

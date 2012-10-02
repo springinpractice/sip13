@@ -12,93 +12,57 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * TicketDto domain object.
- * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @Entity
 @Table(name = "ticket")
 public class Ticket {
-	private Long id;
-	private TicketStatus status;
-	private String userName;
-	private String userEmail;
-	private String description;
-	private Date dateCreated;
 	
-	/**
-	 * @return ID
-	 */
+	// Spring Data REST wants the JPA annotations to be on the fields, at least for now. [WLW]
+	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long getId() { return id; }
-	
-	/**
-	 * @param id ID
-	 */
-	@SuppressWarnings("unused")
-	private void setId(Long id) { this.id = id; }
+	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name = "ticket_status_id")
+	private TicketStatus status;
+	
+	@Column(name = "user_name")
+	private String userName;
+	
+	@Column(name = "user_email")
+	private String userEmail;
+	
+	@Column(name = "description")
+	private String description;
+	
+	@Column(name = "date_created")
+	private Date dateCreated;
+	
+	public Long getId() { return id; }
+	
+	@SuppressWarnings("unused")
+	private void setId(Long id) { this.id = id; }
+	
 	public TicketStatus getStatus() { return status; }
 	
 	public void setStatus(TicketStatus status) { this.status = status; }
 
-	/**
-	 * @return user name
-	 */
-	@Column(name = "user_name")
 	public String getUserName() { return userName; }
 	
-	/**
-	 * @param name user name
-	 */
 	public void setUserName(String name) { this.userName = name; }
 
-	/**
-	 * @return user e-mail address
-	 */
-	@Column(name = "user_email")
 	public String getUserEmail() { return userEmail; }
 
-	/**
-	 * @param email user e-mail address
-	 */
 	public void setUserEmail(String email) { this.userEmail = email; }
 	
-	/**
-	 * @return description
-	 */
-	@Column(name = "description")
 	public String getDescription() { return description; }
 
-	/**
-	 * @param desc description
-	 */
 	public void setDescription(String desc) { this.description = desc; }
 	
-	/**
-	 * @return date created
-	 */
-	@Column(name = "date_created")
 	public Date getDateCreated() { return dateCreated; }
 
-	/**
-	 * @param dateCreated date created
-	 */
 	public void setDateCreated(Date dateCreated) { this.dateCreated = dateCreated; }
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "[TicketDto: userName=" + userName
-			+ ", userEmail=" + userEmail
-			+ ", description=" + description
-			+ ", dateCreated=" + dateCreated
-			+ "]";
-	}
 }

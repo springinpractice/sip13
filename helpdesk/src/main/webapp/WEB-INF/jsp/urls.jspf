@@ -1,8 +1,0 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
-<c:url var="homeUrl" value="/home.html" />
-<c:url var="ticketListUrl" value="/tickets.html" />
-<c:url var="createTicketUrl" value="/tickets.html" />
-<c:url var="newTicketFormUrl" value="/tickets/new.html" />

@@ -56,7 +56,12 @@ Willie Wheeler (willie.wheeler@gmail.com)
 	
 	<tx:annotation-driven />
 	
-	<jpa:repositories base-package="com.springinpractice.ch13.helpdesk.dao" />
+	<jpa:repositories base-package="com.springinpractice.ch13.helpdesk.repo" />
 	
-	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.service.impl" />
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+		p:basename="classpath:/spring/messages" />
+	
+	<!-- Put this in the root context so DelegatingFilterProxy can find the filter -->
+	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.web.navigation" />
 </beans>

@@ -24,12 +24,47 @@ Willie Wheeler (willie.wheeler@gmail.com)
 	
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
-	<mvc:view-controller path="/" view-name="redirect:/home.html" />
-	<mvc:view-controller path="/home.html" view-name="extras/home" />
 	
-	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.web" />
+	<mvc:view-controller path="/" view-name="home" />
+	<mvc:view-controller path="/knowledgebase" view-name="knowledgeBase" />
+	<mvc:view-controller path="/approvals" view-name="approvals" />
+	<mvc:view-controller path="/tasks" view-name="tasks" />
+	<mvc:view-controller path="/surveys" view-name="surveys" />
+	<mvc:view-controller path="/reporting" view-name="reporting" />
 	
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/WEB-INF/jsp/"
-		p:suffix=".jsp" />
+	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.web.controller" />
+	
+	
+	<!-- =========================================================================================================== -->
+	<!-- Views                                                                                                       -->
+	<!-- =========================================================================================================== -->
+	
+	<!-- Tiles -->
+	<bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles/**/*.xml</value>
+			</list>
+		</property>
+		
+		<!-- Initialize expression language support for use in Tiles definitions. -->
+		<property name="tilesProperties">
+			<props>
+				<prop key="org.apache.tiles.evaluator.AttributeEvaluator">org.apache.tiles.evaluator.el.ELAttributeEvaluator</prop>
+			</props>
+		</property>        
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:favorParameter="true">
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver" />
+				<!--
+				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+					p:prefix="/WEB-INF/jsp/"
+					p:suffix=".jsp" />
+				-->
+			</list>
+		</property>
+	</bean>
 </beans>

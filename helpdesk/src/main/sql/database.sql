@@ -9,8 +9,8 @@ use sip13_help_desk;
 
 create table ticket_status (
     id tinyint unsigned not null auto_increment primary key,
-    ukey varchar(80) not null,
-    name varchar(80) not null
+    ukey varchar(80),
+    name varchar(80)
 ) engine = InnoDB;
 
 create table ticket (
@@ -18,7 +18,7 @@ create table ticket (
     ticket_status_id tinyint unsigned not null,
     user_name varchar(80) not null,
     user_email varchar(80) not null,
-    description varchar(4000) not null,
+    description text(4000) not null,
     date_created timestamp not null,
     foreign key (ticket_status_id) references ticket_status (id)
 ) engine = InnoDB;
