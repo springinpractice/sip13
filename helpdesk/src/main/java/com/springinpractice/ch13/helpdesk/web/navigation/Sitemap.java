@@ -28,6 +28,8 @@ public class Sitemap implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		NodeTemplate home = node(null, "home", Paths.HOME);
+		NodeTemplate login = node(home, "login", Paths.LOGIN);
+		NodeTemplate accessDenied = node(home, "accessDenied", Paths.ACCESS_DENIED);
 		
 		NodeTemplate tickets = node(home, "tickets", Paths.TICKETS);
 		NodeTemplate newTicket = node(tickets, "newTicket", Paths.NEW_TICKET, new MethodAndPath("post", Paths.TICKETS));

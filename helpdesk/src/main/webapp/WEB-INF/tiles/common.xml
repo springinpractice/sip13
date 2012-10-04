@@ -4,5 +4,18 @@
 		"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 
 <tiles-definitions>
+
+	<!-- Templates-->
 	<definition name="pageTemplate" template="/WEB-INF/jsp/templates/pageTemplate.jsp" />
+	
+	<!-- Pages -->
+	<definition name="home" extends="pageTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/home.jsp" />
+	</definition>
+	<definition name="login" extends="pageTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/login.jsp" />
+	</definition>
+	<definition name="accessDenied" extends="pageTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/accessDenied.jsp" />
+	</definition>
 </tiles-definitions>

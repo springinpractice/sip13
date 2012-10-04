@@ -26,6 +26,8 @@ Willie Wheeler (willie.wheeler@gmail.com)
 	<mvc:default-servlet-handler />
 	
 	<mvc:view-controller path="/" view-name="home" />
+	<mvc:view-controller path="/login" view-name="login" />
+	<mvc:view-controller path="/accessdenied" view-name="accessDenied" />
 	<mvc:view-controller path="/knowledgebase" view-name="knowledgeBase" />
 	<mvc:view-controller path="/approvals" view-name="approvals" />
 	<mvc:view-controller path="/tasks" view-name="tasks" />

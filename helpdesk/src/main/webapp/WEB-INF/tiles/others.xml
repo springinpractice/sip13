@@ -4,9 +4,6 @@
 		"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 
 <tiles-definitions>
-	<definition name="home" extends="pageTemplate">
-		<put-attribute name="content" value="/WEB-INF/jsp/home.jsp" />
-	</definition>
 	<definition name="knowledgeBase" extends="pageTemplate">
 		<put-attribute name="content" value="/WEB-INF/jsp/knowledgeBase/knowledgeBaseHome.jsp" />
 	</definition>

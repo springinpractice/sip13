@@ -63,5 +63,6 @@ Willie Wheeler (willie.wheeler@gmail.com)
 		p:basename="classpath:/spring/messages" />
 	
 	<!-- Put this in the root context so DelegatingFilterProxy can find the filter -->
+	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.service.impl" />
 	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.web.navigation" />
 </beans>

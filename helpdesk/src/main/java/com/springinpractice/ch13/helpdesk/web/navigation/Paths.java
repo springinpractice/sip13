@@ -5,6 +5,9 @@ package com.springinpractice.ch13.helpdesk.web.navigation;
  */
 public class Paths {
 	public static final String HOME = "/";
+	public static final String LOGIN = "/login";
+	public static final String LOGOUT = "/logout";
+	public static final String ACCESS_DENIED = "/accessdenied";
 	
 	public static final String TICKETS = "/tickets";
 	public static final String NEW_TICKET = TICKETS + "/new";

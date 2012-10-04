@@ -1,15 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
 <%@ include file="/WEB-INF/jsp/templates/declarations.jsp" %>
 
 <p>Please use this form to create a support ticket for the user.</p>
 
 <div class="row-fluid">
-	<div class="span8">
-		<div class="well">
-			<form:form modelAttribute="ticket" action="${ticketsUrl}">
+	<div class="span6">
+		<form:form modelAttribute="ticket" action="${ticketsUrl}">
+			<div class="well">
 				<div class="control-group">
 					<label class="control-label" for="userName">User name:</label>
 					<div class="controls">
@@ -37,13 +36,11 @@
 						</form:errors>
 					</div>
 				</div>
-				<div class="control-group">
-					<div class="controls">
-						<button type="submit" class="btn btn-primary">Submit</button>
-						<a href="${ticketsUrl}" class="btn btn-link">Cancel</a> 
-					</div>
-				</div>
-			</form:form>
-		</div>
+			</div>
+			<div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+				<a href="${ticketsUrl}" class="btn btn-link">Cancel</a> 
+			</div>
+		</form:form>
 	</div>
 </div>

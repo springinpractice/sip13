@@ -2,16 +2,16 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
-
 <%@ include file="/WEB-INF/jsp/templates/declarations.jsp" %>
 
-<c:set var="bootstrapPath" value="/bootstrap-2.1.1" />
+<c:set var="staticPath" value="/static" />
+<c:set var="bootstrapPath" value="${staticPath}/bootstrap-2.1.1" />
 <c:url var="bootstrapCssUrl" value="${bootstrapPath}/css/bootstrap.min.css" />
 <c:url var="bootstrapResponsiveCssUrl" value="${bootstrapPath}/css/bootstrap-responsive.min.css" />
 <c:url var="bootstrapJsUrl" value="${bootstrapPath}/js/bootstrap.min.js" />
-
-<c:url var="helpDeskCssUrl" value="/css/helpdesk.css" />
+<c:url var="helpDeskCssUrl" value="${staticPath}/css/helpdesk.css" />
 
 <html lang="en">
 	<head>
@@ -21,7 +21,6 @@
 		<link href="${bootstrapCssUrl}" rel="stylesheet">
 		<style>
 			body { padding-top: 60px; padding-bottom: 40px; }
-			.sidebar-nav { padding: 9px 0; }
 			footer { text-align: center; }
 		</style>
 		<link href="${bootstrapResponsiveCssUrl}" rel="stylesheet">
@@ -44,7 +43,13 @@
 					<a class="brand" href="${homeUrl}">SIP Help Desk</a>
 					<div class="nav-collapse collapse">
 						<p class="navbar-text pull-right">
-							Logged in as <a href="#" class="navbar-link">username</a>
+							<security:authorize access="isAnonymous()">
+								Hi, guest. <a href="${loginUrl}" class="navbar-link">Log in</a>
+							</security:authorize>
+							<security:authorize access="isAuthenticated()">
+								Hi, <security:authentication property="principal.username" />.
+								<a href="${logoutUrl}" class="navbar-link">Log out</a>
+							</security:authorize>
 						</p>
 						<ul class="nav">
 							<c:forEach var="topLevelNode" items="${topLevelNodes}">

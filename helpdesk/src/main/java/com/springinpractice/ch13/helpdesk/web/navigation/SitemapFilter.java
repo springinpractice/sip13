@@ -35,7 +35,7 @@ public class SitemapFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		
 		String path = httpRequest.getServletPath();
-		log.debug("Filtering request: {}", path);
+		log.debug("Filtering request: path={}", path);
 		
 		NodeTemplate node = sitemap.findNodeByRequest(httpRequest);
 		if (node != null) {

@@ -12,6 +12,8 @@
 
 <%-- URLs --%>
 <c:url var="homeUrl" value="${homeNode.path}" />
+<c:url var="loginUrl" value="/login" />
+<c:url var="logoutUrl" value="/logout" />
 <c:url var="ticketsUrl" value="${ticketsNode.path}" />
 <c:url var="newTicketUrl" value="${newTicketNode.path}" />
 <c:url var="knowledgeBaseUrl" value="${knowledgeBaseNode.path}" />
