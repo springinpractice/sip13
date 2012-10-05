@@ -14,22 +14,22 @@
 	</div>
 </c:if>
 
-<p><span class="label label-info">Note</span> Username/password is raylene/raylene.</p>
+<p><span class="label label-info">Note</span> Use paul/paul or aimee/aimee.</p>
 
 <div class="row-fluid">
-	<div class="span6">
+	<div class="span3">
 		<form action="${postLoginUrl}" method="post">
 			<div class="well">
 				<div class="control-group">
 					<label class="control-label" for="userName">Username:</label>
 					<div class="controls">
-						<input type="text" name="j_username" class="span8" />
+						<input type="text" name="j_username" class="span12" />
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="userEmail">Password:</label>
 					<div class="controls">
-						<input type="password" name="j_password" class="span8" />
+						<input type="password" name="j_password" class="span12" />
 					</div>
 				</div>
 				<div class="control-group">

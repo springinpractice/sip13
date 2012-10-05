@@ -13,6 +13,6 @@
 </security:authorize>
 
 <security:authorize access="isAuthenticated()">
-	<h2>Welcome, <security:authentication property="principal.username" /></h2>
-	<p>Now that you're logged in, why not <a href="${newTicketUrl}">create a ticket?</a></p>
+	<h2>Welcome, <security:authentication property="principal.firstName" />.</h2>
+	<p>Now that you're logged in, why not <a href="${newTicketUrl}">report an issue?</a></p>
 </security:authorize>

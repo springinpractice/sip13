@@ -12,6 +12,8 @@ public class Paths {
 	public static final String TICKETS = "/tickets";
 	public static final String NEW_TICKET = TICKETS + "/new";
 	
+	public static final String USERS = "/users";
+	
 	public static final String KNOWLEDGE_BASE = "/knowledgebase";
 	
 	public static final String APPROVALS = "/approvals";

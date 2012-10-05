@@ -65,6 +65,10 @@
 		<!-- Spring Data -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-rest-webmvc</artifactId>
 		</dependency>
 			
@@ -85,11 +89,25 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 		</dependency> 
-		
+			
 		<!-- Hibernate -->
+		<!-- Note that there's no official Sun/Oracle JPA 2.0 artifact, so we're using Hibernate's. -->
+		<!-- http://stackoverflow.com/questions/3893857/jpa-2-0-api-maven-artifact -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
 		</dependency>
 		
 		<!-- Apache Commons -->

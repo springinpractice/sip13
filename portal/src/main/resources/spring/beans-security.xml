@@ -22,14 +22,11 @@
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/logout" access="permitAll" />
+		<intercept-url pattern="/tickets/**" access="isAuthenticated()" />
 		<intercept-url pattern="/**" access="denyAll" />
 	</http>
 	
 	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="raylene" password="raylene" authorities="ROLE_USER" />
-			</user-service>
-		</authentication-provider>
+		<authentication-provider user-service-ref="userService" />
 	</authentication-manager>
 </beans:beans>

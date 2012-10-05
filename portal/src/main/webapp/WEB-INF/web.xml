@@ -8,6 +8,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<!-- Security goes in the root context so the DelegatingFilterProxy can find it -->
 		<param-value>
+			classpath:/spring/beans-service.xml
 			classpath:/spring/beans-security.xml
 		</param-value>
 	</context-param>

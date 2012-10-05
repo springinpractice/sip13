@@ -34,6 +34,8 @@ public class Sitemap implements InitializingBean {
 		NodeTemplate tickets = node(home, "tickets", Paths.TICKETS);
 		NodeTemplate newTicket = node(tickets, "newTicket", Paths.NEW_TICKET, new MethodAndPath("post", Paths.TICKETS));
 		
+		NodeTemplate users = node(home, "users", Paths.USERS);
+		
 		NodeTemplate knowledgeBase = node(home, "knowledgeBase", Paths.KNOWLEDGE_BASE);
 		
 		NodeTemplate approvals = node(home, "approvals", Paths.APPROVALS);
@@ -46,6 +48,7 @@ public class Sitemap implements InitializingBean {
 		
 		// Create top-level nodes
 		topLevelNodes.add(tickets);
+		topLevelNodes.add(users);
 		topLevelNodes.add(knowledgeBase);
 		topLevelNodes.add(approvals);
 		topLevelNodes.add(tasks);

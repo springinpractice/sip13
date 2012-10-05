@@ -44,10 +44,10 @@
 					<div class="nav-collapse collapse">
 						<p class="navbar-text pull-right">
 							<security:authorize access="isAnonymous()">
-								Hi, guest. <a href="${loginUrl}" class="navbar-link">Log in</a>
+								<a href="${loginUrl}" class="navbar-link">Log in</a>
 							</security:authorize>
 							<security:authorize access="isAuthenticated()">
-								Hi, <security:authentication property="principal.username" />.
+								Logged in as <security:authentication property="principal.firstNameLastName" />.
 								<a href="${logoutUrl}" class="navbar-link">Log out</a>
 							</security:authorize>
 						</p>

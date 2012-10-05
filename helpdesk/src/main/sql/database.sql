@@ -26,7 +26,10 @@ create table ticket (
 create table user (
     id mediumint(8) unsigned not null auto_increment primary key,
     username varchar(20) unique not null,
-    password varchar(20) not null
+    password varchar(20) not null,
+    first_name varchar(40) not null,
+    last_name varchar(40) not null,
+    email varchar(80) not null
 ) engine = InnoDB;
 
 
@@ -65,10 +68,10 @@ insert into ticket_status (ukey, name) values
 -- Sample data
 -- =====================================================================================================================
 
-insert into user (username, password) values
-    ('willie', 'willie'),
-    ('john', 'john'),
-    ('josh', 'josh');
+insert into user (username, password, first_name, last_name, email) values
+    ('willie', 'willie', 'Willie', 'Wheeler', 'willie@example.com'),
+    ('john', 'john', 'John', 'Wheeler', 'john@example.com'),
+    ('josh', 'josh', 'Josh', 'White', 'josh@example.com');
 
 call createTicket('open', 'Chris Mahurin', 'chris@example.com', 'The login doesn''t seem to work.');
 call createTicket('ack', 'Phil Turner', 'phil@example.com', 'I received an A but it should have been a B.');
