@@ -23,7 +23,8 @@ Willie Wheeler (willie.wheeler@gmail.com)
 		http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 		
 	<mvc:default-servlet-handler />
-	<mvc:annotation-driven />
+	
+	<mvc:annotation-driven conversion-service="conversionService" />
 	
 	
 	<!-- =========================================================================================================== -->
@@ -35,7 +36,7 @@ Willie Wheeler (willie.wheeler@gmail.com)
 	<mvc:view-controller path="/accessdenied" view-name="accessDenied" />
 	
 	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.web.controller" />
-	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.web.interceptor" />
+	<context:component-scan base-package="com.springinpractice.ch13.sitemap.web.interceptor" />
 	
 	<mvc:interceptors>
 		<ref bean="sitemapHandlerInterceptor" />
@@ -63,4 +64,23 @@ Willie Wheeler (willie.wheeler@gmail.com)
 	</bean>
 	
 	<bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver" />
+	
+	
+	<!-- =========================================================================================================== -->
+	<!-- Other assorted goodies                                                                                      -->
+	<!-- =========================================================================================================== -->
+	
+	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.formatter" />
+	
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="formatters">
+			<set>
+				<ref bean="ticketCategoryFormatter" />
+			</set>
+		</property>
+	</bean>
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+		p:basename="classpath:/spring/messages" />
 </beans>

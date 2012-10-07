@@ -28,6 +28,7 @@ import com.springinpractice.ch13.helpdesk.model.TicketStatus;
 import com.springinpractice.ch13.helpdesk.model.TicketStatusKeys;
 import com.springinpractice.ch13.helpdesk.portal.model.Customer;
 import com.springinpractice.ch13.helpdesk.portal.repo.CustomerRepository;
+import com.springinpractice.ch13.helpdesk.repo.TicketCategoryRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketStatusRepository;
 import com.springinpractice.ch13.helpdesk.web.util.ModelKeys;
@@ -43,6 +44,7 @@ public class TicketController implements InitializingBean {
 	private static final Logger log = LoggerFactory.getLogger(TicketController.class);
 	
 	@Inject private TicketRepository ticketRepo;
+	@Inject private TicketCategoryRepository ticketCategoryRepo;
 	@Inject private TicketStatusRepository ticketStatusRepo;
 	@Inject private CustomerRepository customerRepo;
 	
@@ -91,7 +93,7 @@ public class TicketController implements InitializingBean {
 	@RequestMapping(value = "/tickets/new", method = RequestMethod.GET)
 	public String getNewTicketForm(Model model) {
 		model.addAttribute(new Ticket());
-		return ViewKeys.NEW_TICKET;
+		return prepareNewTicketForm(model);
 	}
 	
 	@RequestMapping(value = "/tickets", method = RequestMethod.POST)
@@ -107,13 +109,18 @@ public class TicketController implements InitializingBean {
 			}
 		}
 		
-		if (result.hasErrors()) { return ViewKeys.NEW_TICKET; }
+		if (result.hasErrors()) { return prepareNewTicketForm(model); }
 		
 		ticket.setStatus(openStatus);
 		ticket.setDateCreated(new Date());
 		ticketRepo.save(ticket);
 		
 		return ViewKeys.REDIRECT_TO_TICKET_CREATED;
+	}
+	
+	private String prepareNewTicketForm(Model model) {
+		model.addAttribute(ticketCategoryRepo.findAll());
+		return ViewKeys.NEW_TICKET;
 	}
 	
 	

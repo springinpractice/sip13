@@ -65,6 +65,8 @@ public class SitemapServiceImpl implements SitemapService, InitializingBean {
 		
 		if ("get".equalsIgnoreCase(method)) {
 			// FIXME Need to be able to handle path variables more generally
+			// Check out o.s.s.web.util.AntPathRequestMatcher? Don't think that's it, but it might point the direction.
+			// See also RequestMappingHandlerMapping
 			if (path.matches("/tickets/\\d+")) {
 				return siteNodeRepo.findByKey("ticketDetails");
 			} else {

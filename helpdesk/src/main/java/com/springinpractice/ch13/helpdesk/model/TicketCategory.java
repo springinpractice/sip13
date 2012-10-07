@@ -11,11 +11,8 @@ import javax.persistence.Table;
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @Entity
-@Table(name = "ticket_status")
-public class TicketStatus {
-	
-	// Spring Data REST/JPA wants the JPA annotations to be on the fields, not the methods. Otherwise the fields won't
-	// show up in the JSON.
+@Table(name = "ticket_category")
+public class TicketCategory {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,20 +27,13 @@ public class TicketStatus {
 	
 	public Long getId() { return id; }
 	
-	@SuppressWarnings("unused")
-	private void setId(Long id) { this.id = id; }
-	
 	public String getKey() { return key; }
-	
-	public void setKey(String key) { this.key = key; }
 	
 	public String getName() { return name; }
 	
-	public void setName(String name) { this.name = name; }
-
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		final int prime = 13;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
@@ -57,7 +47,7 @@ public class TicketStatus {
 		if (obj == null) { return false; }
 		if (getClass() != obj.getClass()) { return false; }
 		
-		TicketStatus other = (TicketStatus) obj;
+		TicketCategory other = (TicketCategory) obj;
 		
 		if (id == null) {
 			if (other.id != null) { return false; }
@@ -78,5 +68,10 @@ public class TicketStatus {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "TicketCategory [id=" + id + ", key=" + key + ", name=" + name + "]";
 	}
 }

@@ -1,4 +1,4 @@
-package com.springinpractice.ch13.helpdesk.web.interceptor;
+package com.springinpractice.ch13.sitemap.web.interceptor;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;

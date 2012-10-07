@@ -23,13 +23,21 @@ create table ticket_status (
     name varchar(80) unique not null
 ) engine = InnoDB;
 
+create table ticket_category (
+    id tinyint unsigned not null auto_increment primary key,
+    ukey varchar(80) unique not null,
+    name varchar(40) unique not null
+) engine = InnoDB;
+
 create table ticket (
     id mediumint(8) unsigned not null auto_increment primary key,
     ticket_status_id tinyint unsigned not null,
     customer_username varchar(20) not null,
+    ticket_category_id tinyint unsigned not null,
     description text(4000) not null,
     date_created timestamp not null,
-    foreign key (ticket_status_id) references ticket_status (id)
+    foreign key (ticket_status_id) references ticket_status (id),
+    foreign key (ticket_category_id) references ticket_category (id)
 ) engine = InnoDB;
 
 create table user (
@@ -64,11 +72,15 @@ end //
 create procedure createTicket(
     $status_key varchar(80),
     $customer_username varchar(20),
+    $category_key varchar(80),
     $description varchar(4000))
 begin
     declare ticket_status_id tinyint;
+    declare ticket_category_id tinyint;
     select id from ticket_status where ukey = $status_key into ticket_status_id;
-    insert into ticket (ticket_status_id, customer_username, description) values (ticket_status_id, $customer_username, $description);
+    select id from ticket_category where ukey = $category_key into ticket_category_id;
+    insert into ticket (ticket_status_id, customer_username, ticket_category_id, description) values
+        (ticket_status_id, $customer_username, ticket_category_id, $description);
 end //
 
 delimiter ;
@@ -97,6 +109,12 @@ insert into ticket_status (ukey, name) values
     ('in_progress', 'In progress'),
     ('rejected', 'Rejected'),
     ('closed', 'Closed');
+    
+insert into ticket_category (ukey, name) values
+    ('billing', 'Billing'),
+    ('general', 'General'),
+    ('password', 'Password'),
+    ('product', 'Product');
 
 
 -- =====================================================================================================================
@@ -108,6 +126,6 @@ insert into user (username, password, first_name, last_name, email) values
     ('john', 'john', 'John', 'Wheeler', 'john@example.com'),
     ('josh', 'josh', 'Josh', 'White', 'josh@example.com');
 
-call createTicket('open', 'paul', 'The login doesn''t seem to work.');
-call createTicket('ack', 'aimee', 'I received an A but it should have been a B.');
-call createTicket('open', 'paul', 'This class costs too much.');
+call createTicket('open', 'paul', 'billing', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vestibulum tempus congue. Aenean rhoncus pellentesque nisi fringilla mollis. Morbi a turpis posuere tellus dictum vehicula. Phasellus lacinia pellentesque felis, non pellentesque sem eleifend vitae. Phasellus sollicitudin commodo massa id dignissim. Aliquam auctor leo eget erat rhoncus sit amet blandit nisi luctus. Phasellus id nunc a augue lobortis mattis. Aenean commodo lectus in elit fringilla at tincidunt eros dapibus. Aliquam erat volutpat. In hac habitasse platea dictumst. In hac habitasse platea dictumst. Sed eu dolor nulla. Aliquam dictum, sapien at posuere egestas, orci magna aliquam ipsum, sit amet pellentesque mauris eros sit amet nibh.');
+call createTicket('ack', 'aimee', 'password', 'Can''t change my password.');
+call createTicket('open', 'paul', 'general', 'Mauris sagittis, arcu quis molestie ultricies, neque erat vulputate tortor, dapibus venenatis dolor sapien eget sem. Nulla quis neque quis erat iaculis accumsan ac eget nunc. Proin eu lorem sem. Donec condimentum tincidunt blandit. Proin lacinia orci a libero suscipit ut porttitor metus porttitor. Aliquam mattis nibh et nisl vulputate semper. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean vulputate eros nec libero tristique commodo dictum nibh aliquet. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.');

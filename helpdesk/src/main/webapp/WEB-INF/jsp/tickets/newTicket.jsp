@@ -6,15 +6,27 @@
 <p>Please use this form to create a support ticket for the user.</p>
 
 <div class="row-fluid">
-	<div class="span6">
+	<div class="span8">
 		<form:form modelAttribute="ticket" action="${ticketsUrl}">
 			<div class="well">
 				<div class="control-group">
 					<label class="control-label" for="userName">Customer username:</label>
 					<div class="controls">
-						<form:input path="customerUsername" class="span8" />
+						<form:input path="customerUsername" class="span4" />
 						<form:errors path="customerUsername">
 							<div><span class="iconx warning"><form:errors path="customerUsername" /></span></div>
+						</form:errors>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="category">Category:</label>
+					<div class="controls">
+						<form:select path="category">
+							<form:option value="" label="-- Choose one --" />
+							<form:options items="${ticketCategoryList}" itemValue="id" itemLabel="name" />
+						</form:select>
+						<form:errors path="category">
+							<div><span class="iconx warning"><form:errors path="category" /></span></div>
 						</form:errors>
 					</div>
 				</div>

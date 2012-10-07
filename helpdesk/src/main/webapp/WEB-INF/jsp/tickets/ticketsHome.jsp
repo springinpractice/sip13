@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%@ include file="/WEB-INF/jsp/templates/declarations.jsp" %>
 
@@ -23,9 +24,10 @@
 				<thead>
 					<tr>
 						<th>ID</th>
-						<th>Date</th>
+						<th>Created</th>
 						<th>Status</th>
 						<th>Customer</th>
+						<th>Category</th>
 						<th>Description</th>
 						<th></th>
 					</tr>
@@ -40,12 +42,22 @@
 							<td><c:out value="${ticket.id}" /></td>
 							<td>
 								<c:if test="${not empty ticket.dateCreated}">
-									<span class="iconx calendar"><fmt:formatDate value="${ticket.dateCreated}" type="both" /></span>
+									<nobr><fmt:formatDate value="${ticket.dateCreated}" type="both" /></nobr>
 								</c:if>
 							</td>
 							<td><c:out value="${ticket.status.name}" /></td>
-							<td><span class="iconx user"><c:out value="${customer.firstNameLastName}" /></span></td>
-							<td><c:out value="${ticket.description}" /></td>
+							<td><c:out value="${customer.firstNameLastName}" /></td>
+							<td><c:out value="${ticket.category.name}" /></td>
+							<td>
+								<c:choose>
+									<c:when test="${fn:length(ticket.description) <= 80}">
+										<c:out value="${ticket.description}" />
+									</c:when>
+									<c:otherwise>
+										<c:out value="${fn:substring(ticket.description, 0, 80)}" />...
+									</c:otherwise>
+								</c:choose>
+							</td>
 							<td><a href="${ticketUrl}">Details</a></td>
 						</tr>
 					</c:forEach>
