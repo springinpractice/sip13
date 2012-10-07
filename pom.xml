@@ -12,7 +12,8 @@
 	
 	<name>Spring in Practice Recipe 13.1</name>
 	<description>
-		Recipe 13.1 shows how to do a point-to-point integration using a RESTful web service and a REST client.
+		Recipe 13.1 shows how to do a simple shared database integration. We have a portal app and a help desk app both
+		sharing the same customer database.
 	</description>
 	
 	<modules>
