@@ -1,5 +1,11 @@
 package com.springinpractice.ch13.helpdesk.web.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.validation.Valid;
 
@@ -13,15 +19,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.springinpractice.ch13.helpdesk.dto.TicketDto;
 import com.springinpractice.ch13.helpdesk.model.Ticket;
 import com.springinpractice.ch13.helpdesk.model.TicketStatus;
+import com.springinpractice.ch13.helpdesk.model.TicketStatusKeys;
+import com.springinpractice.ch13.helpdesk.portal.model.Customer;
+import com.springinpractice.ch13.helpdesk.portal.repo.CustomerRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketStatusRepository;
-import com.springinpractice.ch13.helpdesk.web.navigation.Paths;
+import com.springinpractice.ch13.helpdesk.web.util.ModelKeys;
+import com.springinpractice.ch13.helpdesk.web.util.ViewKeys;
 
 /**
  * Web controller for help desk tickets.
@@ -30,20 +40,17 @@ import com.springinpractice.ch13.helpdesk.web.navigation.Paths;
  */
 @Controller
 public class TicketController implements InitializingBean {
-	private static final String VN_TICKETS_HOME = "ticketsHome";
-	private static final String VN_NEW_TICKET = "newTicket";
-	private static final String VN_REDIRECT_TO_TICKET_CREATED = "redirect:/tickets?status=created";
-	
 	private static final Logger log = LoggerFactory.getLogger(TicketController.class);
 	
 	@Inject private TicketRepository ticketRepo;
 	@Inject private TicketStatusRepository ticketStatusRepo;
+	@Inject private CustomerRepository customerRepo;
 	
 	private TicketStatus openStatus;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		this.openStatus = ticketStatusRepo.findByKey("open");
+		this.openStatus = ticketStatusRepo.findByKey(TicketStatusKeys.OPEN);
 	}
 
 	@InitBinder
@@ -51,31 +58,74 @@ public class TicketController implements InitializingBean {
 		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
 	}
 	
-	@RequestMapping(value = Paths.TICKETS, method = RequestMethod.GET)
+	
+	// =================================================================================================================
+	// Tickets home
+	// =================================================================================================================
+	
+	@RequestMapping(value = "/tickets", method = RequestMethod.GET)
 	public String getTicketsHome(Model model) {
-		model.addAttribute(ticketRepo.findAll());
-		return VN_TICKETS_HOME;
+		List<Ticket> tickets = ticketRepo.findAll();
+		model.addAttribute(tickets);
+		model.addAttribute(ModelKeys.CUSTOMER_MAP, buildCustomerMap(tickets));
+		return ViewKeys.TICKETS_HOME;
 	}
 	
-	@RequestMapping(value = Paths.NEW_TICKET, method = RequestMethod.GET)
+	private Map<String, Customer> buildCustomerMap(List<Ticket> tickets) {
+		Map<String, Customer> customerMap = new HashMap<String, Customer>();
+		
+		List<String> usernames = new ArrayList<String>();
+		for (Ticket ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
+		
+		List<Customer> customers = customerRepo.findByUsernameIn(usernames);
+		for (Customer customer : customers) { customerMap.put(customer.getUsername(), customer); }
+		
+		return customerMap;
+	}
+	
+	
+	// =================================================================================================================
+	// New ticket
+	// =================================================================================================================
+	
+	@RequestMapping(value = "/tickets/new", method = RequestMethod.GET)
 	public String getNewTicketForm(Model model) {
 		model.addAttribute(new Ticket());
-		return VN_NEW_TICKET;
+		return ViewKeys.NEW_TICKET;
 	}
 	
-	@RequestMapping(value = Paths.TICKETS, method = RequestMethod.POST)
-	public String postTicket(@ModelAttribute("ticket") @Valid TicketDto ticketDto, BindingResult result) {
-		log.debug("Creating ticket: {}", ticketDto);
+	@RequestMapping(value = "/tickets", method = RequestMethod.POST)
+	public String postTicket(@ModelAttribute @Valid Ticket ticket, BindingResult result, Model model) {
+		log.debug("Creating ticket: {}", ticket);
 		
-		if (result.hasErrors()) { return VN_NEW_TICKET; }
+		// Additional customer username validation, if needed
+		if (!(result.hasFieldErrors("customerUsername"))) {
+			String username = ticket.getCustomerUsername();
+			Customer customer = customerRepo.findByUsername(username);
+			if (customer == null) {
+				result.rejectValue("customerUsername", "error.noSuchCustomer");
+			}
+		}
 		
-		Ticket ticket = new Ticket();
+		if (result.hasErrors()) { return ViewKeys.NEW_TICKET; }
+		
 		ticket.setStatus(openStatus);
-		ticket.setUserName(ticketDto.getUserName());
-		ticket.setUserEmail(ticketDto.getUserEmail());
-		ticket.setDescription(ticketDto.getDescription());
+		ticket.setDateCreated(new Date());
 		ticketRepo.save(ticket);
 		
-		return VN_REDIRECT_TO_TICKET_CREATED;
+		return ViewKeys.REDIRECT_TO_TICKET_CREATED;
+	}
+	
+	
+	// =================================================================================================================
+	// Ticket details
+	// =================================================================================================================
+	
+	@RequestMapping(value = "/tickets/{id}", method = RequestMethod.GET)
+	public String getTicketDetails(@PathVariable Long id, Model model) {
+		Ticket ticket = ticketRepo.findOne(id);
+		model.addAttribute(ticket);
+		model.addAttribute(customerRepo.findByUsername(ticket.getCustomerUsername()));
+		return ViewKeys.TICKET_DETAILS;
 	}
 }

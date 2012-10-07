@@ -16,7 +16,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>SIP Help Desk</title>
+		<title><c:out value="${node.name}" /> - SIP Help Desk</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="${bootstrapCssUrl}" rel="stylesheet">
 		<style>
@@ -47,7 +47,7 @@
 								Hi, guest. <a href="${loginUrl}" class="navbar-link">Log in</a>
 							</security:authorize>
 							<security:authorize access="isAuthenticated()">
-								Hi, <security:authentication property="principal.username" />.
+								Hi, <security:authentication property="principal.firstName" />.
 								<a href="${logoutUrl}" class="navbar-link">Log out</a>
 							</security:authorize>
 						</p>

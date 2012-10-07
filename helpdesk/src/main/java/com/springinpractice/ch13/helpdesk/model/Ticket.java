@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
@@ -29,11 +31,8 @@ public class Ticket {
 	@JoinColumn(name = "ticket_status_id")
 	private TicketStatus status;
 	
-	@Column(name = "user_name")
-	private String userName;
-	
-	@Column(name = "user_email")
-	private String userEmail;
+	@Column(name = "customer_username")
+	private String customerUsername;
 	
 	@Column(name = "description")
 	private String description;
@@ -50,14 +49,14 @@ public class Ticket {
 	
 	public void setStatus(TicketStatus status) { this.status = status; }
 
-	public String getUserName() { return userName; }
+	@NotNull
+	@Size(min = 1, max = 20)
+	public String getCustomerUsername() { return customerUsername; }
 	
-	public void setUserName(String name) { this.userName = name; }
-
-	public String getUserEmail() { return userEmail; }
-
-	public void setUserEmail(String email) { this.userEmail = email; }
+	public void setCustomerUsername(String customerUsername) { this.customerUsername = customerUsername; }
 	
+	@NotNull
+	@Size(min = 1, max = 4000)
 	public String getDescription() { return description; }
 
 	public void setDescription(String desc) { this.description = desc; }

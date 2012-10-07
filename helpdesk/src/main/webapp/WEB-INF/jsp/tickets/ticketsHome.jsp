@@ -11,16 +11,9 @@
 </c:if>
 
 <section>
-	<form class="form-search pull-right">
-		<div class="input-append">
-			<input type="text" class="search-query" />
-			<button type="submit" class="btn">Search</button>
-		</div>
-	</form>
-	<a href="${newTicketUrl}" class="btn btn-info">New Ticket</a>
+	<a href="${newTicketUrl}" class="btn">New Ticket</a>
 </section>
 <section>
-	<h2>Recent Tickets</h2>
 	<c:choose>
 		<c:when test="${empty ticketList}">
 			<p>There aren't currently any tickets.</p>
@@ -32,13 +25,15 @@
 						<th>ID</th>
 						<th>Date</th>
 						<th>Status</th>
-						<th>User</th>
+						<th>Customer</th>
 						<th>Description</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="ticket" items="${ticketList}">
+						<c:set var="customer" value="${customerMap[ticket.customerUsername]}" />
+						
 						<%-- FIXME Use JSP tag here so we can source URL from Sitemap --%>
 						<c:url var="ticketUrl" value="/tickets/${ticket.id}" />
 						<tr>
@@ -49,9 +44,9 @@
 								</c:if>
 							</td>
 							<td><c:out value="${ticket.status.name}" /></td>
-							<td><span class="iconx user"><a href="#"><c:out value="${ticket.userName}" /></a></span></td>
+							<td><span class="iconx user"><c:out value="${customer.firstNameLastName}" /></span></td>
 							<td><c:out value="${ticket.description}" /></td>
-							<td><a href="${ticketUrl}">View</a></td>
+							<td><a href="${ticketUrl}">Details</a></td>
 						</tr>
 					</c:forEach>
 				</tbody>

@@ -13,4 +13,7 @@
 	<definition name="newTicket" extends="pageTemplate">
 		<put-attribute name="content" value="/WEB-INF/jsp/tickets/newTicket.jsp" />
 	</definition>
+	<definition name="ticketDetails" extends="pageTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/tickets/ticketDetails.jsp" />
+	</definition>
 </tiles-definitions>

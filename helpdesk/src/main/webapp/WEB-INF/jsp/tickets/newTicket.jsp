@@ -10,20 +10,11 @@
 		<form:form modelAttribute="ticket" action="${ticketsUrl}">
 			<div class="well">
 				<div class="control-group">
-					<label class="control-label" for="userName">User name:</label>
+					<label class="control-label" for="userName">Customer username:</label>
 					<div class="controls">
-						<form:input path="userName" class="span8" placeholder="First and last name" />
-						<form:errors path="userName">
-							<div><span class="iconx warning"><form:errors path="userName" /></span></div>
-						</form:errors>
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="userEmail">User e-mail:</label>
-					<div class="controls">
-						<form:input path="userEmail" class="span8" placeholder="Valid e-mail address" />
-						<form:errors path="userEmail">
-							<div><span class="iconx warning"><form:errors path="userEmail" /></span></div>
+						<form:input path="customerUsername" class="span8" />
+						<form:errors path="customerUsername">
+							<div><span class="iconx warning"><form:errors path="customerUsername" /></span></div>
 						</form:errors>
 					</div>
 				</div>
