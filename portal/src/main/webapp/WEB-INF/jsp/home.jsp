@@ -8,11 +8,10 @@
 
 <security:authorize access="isAnonymous()">
 	<h2>Please log in</h2>
-	<p>Please <a href="${loginUrl}">log in</a> so you can create a ticket. That's really the only thing you can do around
-	here, so make it a good one.</p>
+	<p>Please <a href="${loginUrl}">log in</a>. That's really the only thing you can do around here right now.</p>
 </security:authorize>
 
 <security:authorize access="isAuthenticated()">
 	<h2>Welcome, <security:authentication property="principal.firstName" />.</h2>
-	<p>Now that you're logged in, why not <a href="${newTicketUrl}">report an issue?</a></p>
+	<p>Now that you're logged in, all you can do is <a href="${logoutUrl}">log out</a>.</p>
 </security:authorize>

@@ -8,13 +8,13 @@ use sip13_help_desk;
 -- =====================================================================================================================
 
 -- For dynamic navigation
-create table site_node_template (
+create table site_node (
     id smallint unsigned not null auto_increment primary key,
     ukey varchar(80) unique not null,
     name varchar(200) not null,
     path varchar(200) not null,
     parent_id smallint unsigned,
-    foreign key (parent_id) references site_node_template (id)
+    foreign key (parent_id) references site_node (id)
 ) engine = InnoDB;
 
 create table ticket_status (
@@ -56,7 +56,7 @@ create table user (
 
 delimiter //
 
-create procedure createSiteNodeTemplate(
+create procedure createSiteNode(
     $parent_key varchar(80),
     $ukey varchar(80),
     $name varchar(200),
@@ -64,9 +64,9 @@ create procedure createSiteNodeTemplate(
 begin
     declare pid smallint;
     if ($parent_key is not null) then
-        select id from site_node_template where ukey = $parent_key into pid;
+        select id from site_node where ukey = $parent_key into pid;
     end if;
-    insert into site_node_template (ukey, name, path, parent_id) values ($ukey, $name, $path, pid);
+    insert into site_node (ukey, name, path, parent_id) values ($ukey, $name, $path, pid);
 end //
 
 create procedure createTicket(
@@ -90,18 +90,18 @@ delimiter ;
 -- Reference data
 -- =====================================================================================================================
 
-call createSiteNodeTemplate(null, 'home', 'Home', '/');
-call createSiteNodeTemplate('home', 'login', 'Log In', '/login');
-call createSiteNodeTemplate('home', 'logout', 'Log Out', '/logout');
-call createSiteNodeTemplate('home', 'accessDenied', 'Access Denied', '/accessdenied');
-call createSiteNodeTemplate('home', 'tickets', 'Tickets', '/tickets');
-call createSiteNodeTemplate('tickets', 'newTicket', 'New Ticket', '/tickets/new');
-call createSiteNodeTemplate('tickets', 'ticketDetails', 'Ticket {id}', '/tickets/{id}');
-call createSiteNodeTemplate('home', 'knowledgeBase', 'Knowledge Base', '/knowledgebase');
-call createSiteNodeTemplate('home', 'approvals', 'Approvals', '/approvals');
-call createSiteNodeTemplate('home', 'tasks', 'Tasks', '/tasks');
-call createSiteNodeTemplate('home', 'surveys', 'Surveys', '/surveys');
-call createSiteNodeTemplate('home', 'reporting', 'Reporting', '/reporting');
+call createSiteNode(null, 'home', 'Home', '/');
+call createSiteNode('home', 'login', 'Log In', '/login');
+call createSiteNode('home', 'logout', 'Log Out', '/logout');
+call createSiteNode('home', 'accessDenied', 'Access Denied', '/accessdenied');
+call createSiteNode('home', 'tickets', 'Tickets', '/tickets');
+call createSiteNode('tickets', 'newTicket', 'New Ticket', '/tickets/new');
+call createSiteNode('tickets', 'ticketDetails', 'Ticket {id}', '/tickets/{id}');
+call createSiteNode('home', 'knowledgeBase', 'Knowledge Base', '/knowledgebase');
+call createSiteNode('home', 'approvals', 'Approvals', '/approvals');
+call createSiteNode('home', 'tasks', 'Tasks', '/tasks');
+call createSiteNode('home', 'surveys', 'Surveys', '/surveys');
+call createSiteNode('home', 'reporting', 'Reporting', '/reporting');
 
 insert into ticket_status (ukey, name) values
     ('open', 'Open'),

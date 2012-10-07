@@ -5,14 +5,6 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	
-	<!--
-	<parent>
-		<groupId>com.springinpractice</groupId>
-		<artifactId>com.springinpractice.top</artifactId>
-		<version>1.0-RELEASE</version>
-	</parent>
-	-->
-	
 	<groupId>com.springinpractice</groupId>
 	<artifactId>com.springinpractice.13_01</artifactId>
 	<version>1.0-RELEASE</version>
@@ -47,7 +39,6 @@
 		<slf4j.version>1.6.6</slf4j.version>
 		<spring.data.commons.version>1.4.0.RC1</spring.data.commons.version>
 		<spring.data.jpa.version>1.2.0.RC1</spring.data.jpa.version>
-		<spring.data.rest.webmvc.version>1.0.0.RC3</spring.data.rest.webmvc.version>
 		<spring.security.version>3.1.2.RELEASE</spring.security.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<tiles.version>2.2.2</tiles.version>
@@ -156,11 +147,6 @@
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-jpa</artifactId>
 				<version>${spring.data.jpa.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.data</groupId>
-				<artifactId>spring-data-rest-webmvc</artifactId>
-				<version>${spring.data.rest.webmvc.version}</version>
 			</dependency>
 			
 			<!-- Spring Security -->

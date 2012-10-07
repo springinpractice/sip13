@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.data.rest.repository.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,7 +31,6 @@ public class User implements UserDetails {
 	@Column(name = "username")
 	private String username;
 	
-	@RestResource(exported = false)
 	@Column(name = "password")
 	private String password;
 	

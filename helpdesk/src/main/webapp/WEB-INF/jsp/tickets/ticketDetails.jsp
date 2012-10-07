@@ -32,11 +32,15 @@
 		<tr>
 			<td class="field-label">Customer</td>
 			<td>
-				<c:out value="${customer.firstNameLastName}" />
-				[<c:out value="${customer.username}" />] &mdash;
-				<span class="iconx mail"><a href="mailto:${customer.email}"><c:out value="${customer.email}" /></a></span>
+				<span class="iconx user"><c:out value="${customer.firstNameLastName}" /></span>
+				[<c:out value="${customer.username}" />]
 			</td>
 			<td class="actions"><a href="#">Edit</a></td>
+		</tr>
+		<tr>
+			<td class="field-label">Customer e-mail</td>
+			<td><span class="iconx mail"><a href="mailto:${customer.email}"><c:out value="${customer.email}" /></a></span></td>
+			<td class="actions"></td>
 		</tr>
 		<tr>
 			<td class="field-label">Category</td>

@@ -1,4 +1,4 @@
-package com.springinpractice.ch13.helpdesk.model;
+package com.springinpractice.ch13.sitemap.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +16,8 @@ import javax.persistence.Table;
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @Entity
-@Table(name = "site_node_template")
-public class SiteNodeTemplate {
+@Table(name = "site_node")
+public class SiteNode {
 	
 	@Id
 	@Column(name = "id")
@@ -35,7 +35,7 @@ public class SiteNodeTemplate {
 	
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
-	private SiteNodeTemplate parent;
+	private SiteNode parent;
 	
 	public Long getId() { return id; }
 	
@@ -45,10 +45,10 @@ public class SiteNodeTemplate {
 	
 	public String getPath() { return path; }
 	
-	public SiteNodeTemplate getParent() { return parent; }
+	public SiteNode getParent() { return parent; }
 	
-	public List<SiteNodeTemplate> getBreadcrumbs() {
-		List<SiteNodeTemplate> breadcrumbs = (parent == null ? new ArrayList<SiteNodeTemplate>() : parent.getBreadcrumbs());
+	public List<SiteNode> getBreadcrumbs() {
+		List<SiteNode> breadcrumbs = (parent == null ? new ArrayList<SiteNode>() : parent.getBreadcrumbs());
 		breadcrumbs.add(this);
 		return breadcrumbs;
 	}

@@ -1,9 +1,9 @@
-package com.springinpractice.ch13.helpdesk.model;
+package com.springinpractice.ch13.sitemap.model;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
-public class SiteNodeTemplateKeys {
+public class SiteNodeKeys {
 	public static final String HOME = "home";
 	public static final String TICKETS = "tickets";
 	public static final String KNOWLEDGE_BASE = "knowledgeBase";

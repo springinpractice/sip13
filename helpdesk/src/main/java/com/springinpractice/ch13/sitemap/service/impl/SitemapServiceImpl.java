@@ -1,4 +1,4 @@
-package com.springinpractice.ch13.helpdesk.service.impl;
+package com.springinpractice.ch13.sitemap.service.impl;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -13,10 +13,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springinpractice.ch13.helpdesk.model.SiteNodeTemplate;
-import com.springinpractice.ch13.helpdesk.model.SiteNodeTemplateKeys;
-import com.springinpractice.ch13.helpdesk.repo.SiteNodeRepository;
-import com.springinpractice.ch13.helpdesk.service.SitemapService;
+import com.springinpractice.ch13.sitemap.model.SiteNode;
+import com.springinpractice.ch13.sitemap.model.SiteNodeKeys;
+import com.springinpractice.ch13.sitemap.repo.SiteNodeRepository;
+import com.springinpractice.ch13.sitemap.service.SitemapService;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
@@ -26,40 +26,40 @@ import com.springinpractice.ch13.helpdesk.service.SitemapService;
 public class SitemapServiceImpl implements SitemapService, InitializingBean {
 	@Inject private SiteNodeRepository siteNodeRepo;
 	
-	private Map<String, SiteNodeTemplate> nodeMap;
-	private List<SiteNodeTemplate> topLevelNodes;
+	private Map<String, SiteNode> nodeMap;
+	private List<SiteNode> topLevelNodes;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		this.nodeMap = new HashMap<String, SiteNodeTemplate>();
-		List<SiteNodeTemplate> nodes = siteNodeRepo.findAll();
-		for (SiteNodeTemplate node : nodes) { nodeMap.put(node.getKey(), node); }
+		this.nodeMap = new HashMap<String, SiteNode>();
+		List<SiteNode> nodes = siteNodeRepo.findAll();
+		for (SiteNode node : nodes) { nodeMap.put(node.getKey(), node); }
 		
 		// TODO Move these to the database too?
-		this.topLevelNodes = new ArrayList<SiteNodeTemplate>();
-		topLevelNodes.add(nodeMap.get(SiteNodeTemplateKeys.HOME));
-		topLevelNodes.add(nodeMap.get(SiteNodeTemplateKeys.TICKETS));
-		topLevelNodes.add(nodeMap.get(SiteNodeTemplateKeys.KNOWLEDGE_BASE));
-		topLevelNodes.add(nodeMap.get(SiteNodeTemplateKeys.APPROVALS));
-		topLevelNodes.add(nodeMap.get(SiteNodeTemplateKeys.TASKS));
-		topLevelNodes.add(nodeMap.get(SiteNodeTemplateKeys.SURVEYS));
-		topLevelNodes.add(nodeMap.get(SiteNodeTemplateKeys.REPORTING));
+		this.topLevelNodes = new ArrayList<SiteNode>();
+		topLevelNodes.add(nodeMap.get(SiteNodeKeys.HOME));
+		topLevelNodes.add(nodeMap.get(SiteNodeKeys.TICKETS));
+		topLevelNodes.add(nodeMap.get(SiteNodeKeys.KNOWLEDGE_BASE));
+		topLevelNodes.add(nodeMap.get(SiteNodeKeys.APPROVALS));
+		topLevelNodes.add(nodeMap.get(SiteNodeKeys.TASKS));
+		topLevelNodes.add(nodeMap.get(SiteNodeKeys.SURVEYS));
+		topLevelNodes.add(nodeMap.get(SiteNodeKeys.REPORTING));
 	}
 	
 	@Override
-	public Map<String, SiteNodeTemplate> getNodeMap() { return nodeMap; }
+	public Map<String, SiteNode> getNodeMap() { return nodeMap; }
 	
 	@Override
-	public List<SiteNodeTemplate> getTopLevelNodes() { return topLevelNodes; }
+	public List<SiteNode> getTopLevelNodes() { return topLevelNodes; }
 	
 	@Override
-	public SiteNodeTemplate findNodeByKey(String key) {
+	public SiteNode findNodeByKey(String key) {
 		notNull(key, "key can't be null");
 		return nodeMap.get(key);
 	}
 	
 	@Override
-	public SiteNodeTemplate findNodeByMethodAndPath(String method, String path) {
+	public SiteNode findNodeByMethodAndPath(String method, String path) {
 		notNull(method, "method can't be null");
 		notNull(path, "path can't be null");
 		

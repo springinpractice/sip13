@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.springinpractice.ch13.helpdesk.model.SiteNodeTemplate;
-import com.springinpractice.ch13.helpdesk.service.SitemapService;
 import com.springinpractice.ch13.helpdesk.web.util.ModelKeys;
+import com.springinpractice.ch13.sitemap.model.SiteNode;
+import com.springinpractice.ch13.sitemap.service.SitemapService;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
@@ -31,7 +31,7 @@ public class SitemapHandlerInterceptor extends HandlerInterceptorAdapter {
 		// the node templates--we need the controller output to do it, but we need to make it available for the view.
 		String method = request.getMethod();
 		String path = request.getServletPath();
-		SiteNodeTemplate node = sitemap.findNodeByMethodAndPath(method, path);
+		SiteNode node = sitemap.findNodeByMethodAndPath(method, path);
 		
 		if (node != null) {
 			request.setAttribute(ModelKeys.NODE, node);

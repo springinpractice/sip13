@@ -14,9 +14,6 @@ import javax.persistence.Table;
 @Table(name = "ticket_status")
 public class TicketStatus {
 	
-	// Spring Data REST/JPA wants the JPA annotations to be on the fields, not the methods. Otherwise the fields won't
-	// show up in the JSON.
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")

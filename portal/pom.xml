@@ -19,14 +19,6 @@
 	</properties>
 	
 	<dependencies>
-		<!--
-		<dependency>
-			<groupId>com.springinpractice</groupId>
-			<artifactId>com.springinpractice.deps-web</artifactId>
-			<version>1.0-RELEASE</version>
-			<type>pom</type>
-		</dependency>
-		-->
 		
 		<!-- Java -->
 		<dependency>
@@ -40,10 +32,6 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
 		</dependency>
 		
 		<!-- Spring -->

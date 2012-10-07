@@ -7,6 +7,5 @@ import com.springinpractice.ch13.helpdesk.model.Ticket;
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
-//@RestResource(path = "tickets")
 public interface TicketRepository extends JpaRepository<Ticket, Long> {	
 }

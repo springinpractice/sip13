@@ -6,8 +6,10 @@
 	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
+		
 		<!-- Security goes in the root context so the DelegatingFilterProxy can find it -->
 		<param-value>
+			classpath:/spring/beans-repo.xml
 			classpath:/spring/beans-service.xml
 			classpath:/spring/beans-security.xml
 		</param-value>
@@ -21,6 +23,7 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
+	
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<servlet-name>ui</servlet-name>
@@ -36,6 +39,7 @@
 			</param-value>
 		</init-param>
 	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>ui</servlet-name>
 		<url-pattern>/</url-pattern>

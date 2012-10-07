@@ -20,8 +20,6 @@ import javax.validation.constraints.Size;
 @Table(name = "ticket")
 public class Ticket {
 	
-	// Spring Data REST wants the JPA annotations to be on the fields, at least for now. [WLW]
-	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)

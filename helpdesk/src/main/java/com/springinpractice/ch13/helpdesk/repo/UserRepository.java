@@ -7,7 +7,6 @@ import com.springinpractice.ch13.helpdesk.model.User;
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
-//@RestResource(path = "users")
 public interface UserRepository extends JpaRepository<User, Long> {
 	
 	User findByUsername(String username);

@@ -13,7 +13,7 @@
 <p><span class="label label-info">Note</span> Username/password is willie/willie.</p>
 
 <div class="row-fluid">
-	<div class="span3">
+	<div class="span4">
 		<form action="${postLoginUrl}" method="post">
 			<div class="well">
 				<div class="control-group">

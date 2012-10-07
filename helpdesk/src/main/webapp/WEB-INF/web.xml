@@ -33,13 +33,6 @@
 	</filter-mapping>
 	
 	<!-- Servlets -->
-	<!--
-	<servlet>
-		<servlet-name>api</servlet-name>
-		<servlet-class>org.springframework.data.rest.webmvc.RepositoryRestExporterServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	-->
 	<servlet>
 		<servlet-name>ui</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -52,12 +45,6 @@
 	</servlet>
 	
 	<!-- Servlet mappings -->
-	<!--
-	<servlet-mapping>
-		<servlet-name>api</servlet-name>
-		<url-pattern>/api/*</url-pattern>
-	</servlet-mapping>
-	-->
 	<servlet-mapping>
 		<servlet-name>ui</servlet-name>
 		<url-pattern>/</url-pattern>
