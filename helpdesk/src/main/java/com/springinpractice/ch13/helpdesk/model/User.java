@@ -43,6 +43,8 @@ public class User implements UserDetails {
 	@Column(name = "email")
 	private String email;
 	
+	public Long getId() { return id; }
+	
 	@Override
 	public String getUsername() { return username; }
 	
