@@ -6,12 +6,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.springinpractice</groupId>
-		<artifactId>com.springinpractice.13_01</artifactId>
+		<artifactId>com.springinpractice.13_02</artifactId>
 		<version>1.0-RELEASE</version>
 	</parent>
-	<artifactId>com.springinpractice.13_01.portal</artifactId>
+	<artifactId>com.springinpractice.13_02.portal</artifactId>
 	<packaging>war</packaging>
-	<name>Spring in Practice Recipe 13.1 - Portal</name>
+	<name>Spring in Practice Recipe 13.2 - Portal</name>
 	<url>http://springinpractice.com/</url>
 	
 	<properties>
@@ -32,6 +32,10 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
 		</dependency>
 		
 		<!-- Spring -->
@@ -95,7 +99,11 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
-			
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-rest-webmvc</artifactId>
+		</dependency>
+		
 		<!-- Hibernate -->
 		<!-- Note that there's no official Sun/Oracle JPA 2.0 artifact, so we're using Hibernate's. -->
 		<!-- http://stackoverflow.com/questions/3893857/jpa-2-0-api-maven-artifact -->

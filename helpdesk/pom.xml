@@ -6,12 +6,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.springinpractice</groupId>
-		<artifactId>com.springinpractice.13_01</artifactId>
+		<artifactId>com.springinpractice.13_02</artifactId>
 		<version>1.0-RELEASE</version>
 	</parent>
-	<artifactId>com.springinpractice.13_01.helpdesk</artifactId>
+	<artifactId>com.springinpractice.13_02.helpdesk</artifactId>
 	<packaging>war</packaging>
-	<name>Spring in Practice Recipe 13.1 - Help Desk</name>
+	<name>Spring in Practice Recipe 13.2 - Help Desk</name>
 	<url>http://springinpractice.com/</url>
 	
 	<properties>
@@ -53,7 +53,11 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
-			
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-rest-webmvc</artifactId>
+		</dependency>
+
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>

@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.springinpractice.ch13.helpdesk.model.Ticket;
 import com.springinpractice.ch13.helpdesk.model.TicketStatus;
 import com.springinpractice.ch13.helpdesk.model.TicketStatusKeys;
-import com.springinpractice.ch13.helpdesk.portal.model.Customer;
-import com.springinpractice.ch13.helpdesk.portal.repo.CustomerRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketCategoryRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketStatusRepository;
@@ -46,7 +44,6 @@ public class TicketController implements InitializingBean {
 	@Inject private TicketRepository ticketRepo;
 	@Inject private TicketCategoryRepository ticketCategoryRepo;
 	@Inject private TicketStatusRepository ticketStatusRepo;
-	@Inject private CustomerRepository customerRepo;
 	
 	private TicketStatus openStatus;
 	
@@ -69,21 +66,21 @@ public class TicketController implements InitializingBean {
 	public String getTicketsHome(Model model) {
 		List<Ticket> tickets = ticketRepo.findAll();
 		model.addAttribute(tickets);
-		model.addAttribute(ModelKeys.CUSTOMER_MAP, buildCustomerMap(tickets));
+//		model.addAttribute(ModelKeys.CUSTOMER_MAP, buildCustomerMap(tickets));
 		return ViewKeys.TICKETS_HOME;
 	}
 	
-	private Map<String, Customer> buildCustomerMap(List<Ticket> tickets) {
-		Map<String, Customer> customerMap = new HashMap<String, Customer>();
-		
-		List<String> usernames = new ArrayList<String>();
-		for (Ticket ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
-		
-		List<Customer> customers = customerRepo.findByUsernameIn(usernames);
-		for (Customer customer : customers) { customerMap.put(customer.getUsername(), customer); }
-		
-		return customerMap;
-	}
+//	private Map<String, Customer> buildCustomerMap(List<Ticket> tickets) {
+//		Map<String, Customer> customerMap = new HashMap<String, Customer>();
+//		
+//		List<String> usernames = new ArrayList<String>();
+//		for (Ticket ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
+//		
+//		List<Customer> customers = customerRepo.findByUsernameIn(usernames);
+//		for (Customer customer : customers) { customerMap.put(customer.getUsername(), customer); }
+//		
+//		return customerMap;
+//	}
 	
 	
 	// =================================================================================================================
@@ -101,13 +98,13 @@ public class TicketController implements InitializingBean {
 		log.debug("Creating ticket: {}", ticket);
 		
 		// Additional customer username validation, if needed
-		if (!(result.hasFieldErrors("customerUsername"))) {
-			String username = ticket.getCustomerUsername();
-			Customer customer = customerRepo.findByUsername(username);
-			if (customer == null) {
-				result.rejectValue("customerUsername", "error.noSuchCustomer");
-			}
-		}
+//		if (!(result.hasFieldErrors("customerUsername"))) {
+//			String username = ticket.getCustomerUsername();
+//			Customer customer = customerRepo.findByUsername(username);
+//			if (customer == null) {
+//				result.rejectValue("customerUsername", "error.noSuchCustomer");
+//			}
+//		}
 		
 		if (result.hasErrors()) { return prepareNewTicketForm(model); }
 		
@@ -132,7 +129,7 @@ public class TicketController implements InitializingBean {
 	public String getTicketDetails(@PathVariable Long id, Model model) {
 		Ticket ticket = ticketRepo.findOne(id);
 		model.addAttribute(ticket);
-		model.addAttribute(customerRepo.findByUsername(ticket.getCustomerUsername()));
+//		model.addAttribute(customerRepo.findByUsername(ticket.getCustomerUsername()));
 		return ViewKeys.TICKET_DETAILS;
 	}
 }
