@@ -45,6 +45,7 @@
 		<spring.data.commons.version>1.4.0.RC1</spring.data.commons.version>
 		<spring.data.jpa.version>1.2.0.RC1</spring.data.jpa.version>
 		<spring.data.rest.webmvc.version>1.0.0.RC3</spring.data.rest.webmvc.version>
+		<spring.hateoas.version>0.3.0.RELEASE</spring.hateoas.version>
 		<spring.security.version>3.1.2.RELEASE</spring.security.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<tiles.version>2.2.2</tiles.version>
@@ -160,6 +161,13 @@
 				<version>${spring.data.rest.webmvc.version}</version>
 			</dependency>
 			
+			<!-- Spring HATEOAS -->
+			<dependency>
+				<groupId>org.springframework.hateoas</groupId>
+				<artifactId>spring-hateoas</artifactId>
+				<version>${spring.hateoas.version}</version>
+			</dependency>
+		
 			<!-- Spring Security -->
 			<dependency>
 				<groupId>org.springframework.security</groupId>
