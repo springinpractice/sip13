@@ -11,6 +11,7 @@
 		<param-value>
 			classpath:/spring/beans-repo.xml
 			classpath:/spring/beans-service.xml
+			classpath:/spring/beans-integration.xml
 			classpath:/spring/beans-security.xml
 		</param-value>
 	</context-param>

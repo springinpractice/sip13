@@ -17,7 +17,7 @@
 <p><span class="label label-info">Note</span> Use paul/paul or aimee/aimee.</p>
 
 <div class="row-fluid">
-	<div class="span4">
+	<div class="span3">
 		<form action="${postLoginUrl}" method="post">
 			<div class="well">
 				<div class="control-group">

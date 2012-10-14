@@ -33,6 +33,7 @@ public class User implements UserDetails {
 	private String username;
 	
 	@Column(name = "password")
+	@RestResource(exported = false)
 	private String password;
 	
 	@Column(name = "first_name")
@@ -52,7 +53,6 @@ public class User implements UserDetails {
 	public void setUsername(String username) { this.username = username; }
 	
 	@Override
-	@RestResource(exported = false)
 	public String getPassword() { return password; }
 	
 	public void setPassword(String password) { this.password = password; }

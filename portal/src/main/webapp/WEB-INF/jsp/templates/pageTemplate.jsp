@@ -63,11 +63,8 @@
 			</div>
 			<hr />
 			<footer>
-				<p><span class="iconx phone">Call 555-SUPPORT for support.</span></p>
-				<p>
-					<span class="iconx leaf"><a href="http://springinpractice.com/">Spring in Practice blog</a></span> |
-					<a href="http://p.yusukekamiyamane.com/">Fugue Icons</a>
-				</p>
+				<span class="iconx leaf"><a href="http://springinpractice.com/">Spring in Practice blog</a></span> |
+				<a href="http://p.yusukekamiyamane.com/">Fugue Icons</a>
 			</footer>
 		</div>
 		<script src="http://code.jquery.com/jquery-latest.js"></script>

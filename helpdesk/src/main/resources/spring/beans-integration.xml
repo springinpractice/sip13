@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+========================================================================================================================
+beans-integration.xml
+
+Copyright (c) 2008-2012 Manning Publications Co.
+
+Willie Wheeler (willie.wheeler@gmail.com)
+========================================================================================================================
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		">
+	
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+	
+	<bean class="com.springinpractice.ch13.helpdesk.integration.gateway.impl.PortalGatewayImpl">
+		<constructor-arg ref="restTemplate" />
+		<constructor-arg value="http://localhost:8180/portal/api" />
+	</bean>
+</beans>

@@ -8,10 +8,11 @@
 
 <security:authorize access="isAnonymous()">
 	<h2>Please log in</h2>
-	<p>Please <a href="${loginUrl}">log in</a>. That's really the only thing you can do around here right now.</p>
+	<p>Please <a href="${loginUrl}">log in</a>.</p>
 </security:authorize>
 
 <security:authorize access="isAuthenticated()">
 	<h2>Welcome, <security:authentication property="principal.firstName" />.</h2>
-	<p>Now that you're logged in, all you can do is <a href="${logoutUrl}">log out</a>.</p>
+	<p>Now that you're logged in, you can either <a href="${newTicketUrl}">report an issue</a> or
+	<a href="${logoutUrl}">log out</a>.</p>
 </security:authorize>

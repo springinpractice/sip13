@@ -19,4 +19,6 @@ public class ModelKeys {
 	
 	/** Map [username -&gt; customer] */
 	public static final String CUSTOMER_MAP = "customerMap";
+	
+	public static final String CUSTOMER = "customer";
 }
