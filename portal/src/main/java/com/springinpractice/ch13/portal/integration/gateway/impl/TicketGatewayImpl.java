@@ -13,6 +13,8 @@ import com.springinpractice.ch13.portal.integration.gateway.TicketGateway;
 import com.springinpractice.ch13.portal.integration.resource.TicketCategoryResource;
 import com.springinpractice.ch13.portal.integration.resource.TicketCategoryResources;
 import com.springinpractice.ch13.portal.integration.resource.TicketResource;
+import com.springinpractice.ch13.portal.integration.resource.TicketStatusResource;
+import com.springinpractice.ch13.portal.integration.resource.TicketStatusResources;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
@@ -32,20 +34,14 @@ public class TicketGatewayImpl implements TicketGateway {
 	public void createTicket(TicketResource ticket) {
 		notNull(ticket, "ticket can't be null");
 		log.info("Creating ticket: {}", ticket);
-		
-		// Have to break this up into two steps? (Not good: category is @NotNull.) See
-		// https://github.com/SpringSource/spring-data-rest/issues/41
-		// http://stackoverflow.com/questions/12879975/spring-data-rest-uri-vs-entity-id
-		// https://github.com/SpringSource/spring-data-rest/wiki/JPA-Repository-REST-Exporter
-		TicketCategoryResource category = ticket.getCategory();
-		ticket.setCategory(null);
-		
 		String uri = baseUri + "/tickets";
 		restTemplate.postForLocation(uri, ticket);
-		
-		// Now post the association per
-		// https://github.com/SpringSource/spring-data-rest/wiki/JPA-Repository-REST-Exporter
-		// TODO
+	}
+	
+	public TicketStatusResource findOpenTicketStatus() {
+		String uri = baseUri + "/ticketstatuses/search/find-by-key?key=open";
+		TicketStatusResources statuses = restTemplate.getForObject(uri, TicketStatusResources.class);
+		return statuses.getContent().iterator().next();
 	}
 	
 	@Override
@@ -57,7 +53,7 @@ public class TicketGatewayImpl implements TicketGateway {
 	
 	@Override
 	public TicketCategoryResource findTicketCategory(String uri) {
-		notNull(uri, "id can't be null");
+		notNull(uri, "uri can't be null");
 		return restTemplate.getForObject(uri, TicketCategoryResource.class);
 	}
 }

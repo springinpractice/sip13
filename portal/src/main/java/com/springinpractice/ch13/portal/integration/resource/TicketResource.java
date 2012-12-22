@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
 /**
@@ -13,21 +15,30 @@ import org.springframework.hateoas.ResourceSupport;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TicketResource extends ResourceSupport {
-	public String username;
-	public TicketCategoryResource category;
-	public String description;
-	public Date dateCreated;
+	private String username;
+	private Link statusLink;
+	private Link categoryLink;
+	private String description;
+	private Date dateCreated;
 	
 	// Need the getters to render this resource in the JSPs.
 	
+	// Use @JsonProperty here, not @RestResource. Spring Data REST never sees this class.
+	@JsonProperty("customerUsername")
 	public String getUsername() { return username; }
 	
 	public void setUsername(String username) { this.username = username; }
 	
+	// Don't use this constraint, because the ticket form doesn't set a status.
 //	@NotNull
-	public TicketCategoryResource getCategory() { return category; }
+	public Link getStatus() { return statusLink; }
 	
-	public void setCategory(TicketCategoryResource category) { this.category = category; }
+	public void setStatus(Link statusLink) { this.statusLink = statusLink; }
+	
+	@NotNull
+	public Link getCategory() { return categoryLink; }
+	
+	public void setCategory(Link categoryLink) { this.categoryLink = categoryLink; }
 	
 	@NotNull
 	@Size(max = 4000)
@@ -38,4 +49,14 @@ public class TicketResource extends ResourceSupport {
 	public Date getDateCreated() { return dateCreated; }
 	
 	public void setDateCreated(Date dateCreated) { this.dateCreated = dateCreated; }
+
+	@Override
+	public String toString() {
+		return "TicketResource [username=" + username
+				+ ", statusLink=" + statusLink
+				+ ", categoryLink=" + categoryLink
+				+ ", description=" + description
+				+ ", dateCreated=" + dateCreated
+				+ "]";
+	}
 }

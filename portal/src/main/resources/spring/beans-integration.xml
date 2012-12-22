@@ -24,6 +24,6 @@ Willie Wheeler (willie.wheeler@gmail.com)
 	
 	<bean class="com.springinpractice.ch13.portal.integration.gateway.impl.TicketGatewayImpl">
 		<constructor-arg ref="restTemplate" />
-		<constructor-arg value="http://localhost:8080/helpdesk/api" />
+		<constructor-arg value="${helpDeskUrl}" />
 	</bean>
 </beans>

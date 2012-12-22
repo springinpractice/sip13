@@ -13,12 +13,16 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @Entity
 @Table(name = "ticket")
 public class Ticket {
+	private static final Logger log = LoggerFactory.getLogger(Ticket.class);
 	
 	@Id
 	@Column(name = "id")
@@ -51,13 +55,16 @@ public class Ticket {
 	
 	public void setStatus(TicketStatus status) { this.status = status; }
 
-	@NotNull
+//	@NotNull
 	@Size(min = 1, max = 20)
 	public String getCustomerUsername() { return customerUsername; }
 	
-	public void setCustomerUsername(String customerUsername) { this.customerUsername = customerUsername; }
+	public void setCustomerUsername(String customerUsername) {
+		log.debug("Setting customerUsername={}", customerUsername);
+		this.customerUsername = customerUsername;
+	}
 	
-	@NotNull
+//	@NotNull
 	public TicketCategory getCategory() { return category; }
 	
 	public void setCategory(TicketCategory category) { this.category = category; }

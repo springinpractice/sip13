@@ -159,6 +159,14 @@
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-rest-webmvc</artifactId>
 				<version>${spring.data.rest.webmvc.version}</version>
+				<exclusions>
+					<!-- This exclusion prevents multiple SLF4J bindings. -->
+					<!-- See http://www.slf4j.org/codes.html#multiple_bindings -->
+					<exclusion>
+						<groupId>ch.qos.logback</groupId>
+						<artifactId>logback-classic</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			
 			<!-- Spring HATEOAS -->

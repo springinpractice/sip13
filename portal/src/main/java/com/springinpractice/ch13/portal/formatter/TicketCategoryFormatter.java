@@ -18,7 +18,7 @@ import com.springinpractice.ch13.portal.integration.resource.TicketCategoryResou
  */
 @Component
 public class TicketCategoryFormatter implements Formatter<TicketCategoryResource> {
-	private static final Logger log = LoggerFactory.getLogger(TicketCategoryFormatter.class);
+	private static final Logger log = LoggerFactory.getLogger(LinkFormatter.class);
 	
 	@Inject private TicketGateway ticketGateway;
 	

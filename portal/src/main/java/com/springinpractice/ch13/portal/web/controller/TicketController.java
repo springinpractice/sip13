@@ -1,13 +1,16 @@
 package com.springinpractice.ch13.portal.web.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.hateoas.Link;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springinpractice.ch13.portal.integration.gateway.TicketGateway;
+import com.springinpractice.ch13.portal.integration.resource.TicketCategoryResource;
 import com.springinpractice.ch13.portal.integration.resource.TicketResource;
+import com.springinpractice.ch13.portal.integration.resource.TicketStatusResource;
 import com.springinpractice.ch13.portal.model.User;
 import com.springinpractice.ch13.portal.web.util.ModelKeys;
 import com.springinpractice.ch13.portal.web.util.ViewKeys;
@@ -29,10 +34,18 @@ import com.springinpractice.ch13.portal.web.util.ViewKeys;
  */
 @Controller
 @RequestMapping("/tickets")
-public class TicketController {
+public class TicketController implements InitializingBean {
 	private static final Logger log = LoggerFactory.getLogger(TicketController.class);
 	
 	@Inject private TicketGateway ticketGateway;
+	
+	private Link statusLink;
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		TicketStatusResource status = ticketGateway.findOpenTicketStatus();
+		this.statusLink = status.getLink("self");
+	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -52,20 +65,28 @@ public class TicketController {
 			BindingResult result,
 			Model model) {
 		
+		log.debug("ticket={}", ticket);
 		log.debug("ticket.category={}", ticket.getCategory());
 		
-		if (result.hasErrors()) { return prepareNewTicketForm(model); }
+		if (result.hasErrors()) {
+			log.debug("Ticket validation error");
+			return prepareNewTicketForm(model);
+		}
+		
+		log.debug("Ticket is valid");
+		ticket.setStatus(statusLink);
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		ticket.setUsername(user.getUsername());
 		ticket.setDateCreated(new Date());
-		ticketGateway.createTicket(ticket);
 		
+		ticketGateway.createTicket(ticket);
 		return ViewKeys.REDIRECT_TO_HOME;
 	}
 	
 	private String prepareNewTicketForm(Model model) {
-		model.addAttribute(ModelKeys.TICKET_CATEGORY_LIST, ticketGateway.findTicketCategories());
+		List<TicketCategoryResource> categories = ticketGateway.findTicketCategories();
+		model.addAttribute(ModelKeys.TICKET_CATEGORY_LIST, categories);
 		return ViewKeys.NEW_TICKET;
 	}
 }
