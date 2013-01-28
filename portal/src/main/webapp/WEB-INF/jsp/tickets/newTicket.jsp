@@ -16,9 +16,7 @@
 					<div class="controls">
 						<form:select path="category">
 							<form:option value="" label="-- Choose one --" />
-							<%-- Here the IDs are URIs. --%>
-							<%-- See https://github.com/SpringSource/spring-data-rest/issues/13 --%>
-							<form:options items="${ticketCategoryList}" itemValue="id.href" itemLabel="name" />
+							<form:options items="${ticketCategoryList}" itemValue="id" itemLabel="name" />
 						</form:select>
 						<form:errors path="category">
 							<div><span class="iconx warning"><form:errors path="category" /></span></div>

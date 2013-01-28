@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
  */
 @Entity
 @Table(name = "ticket")
-public class Ticket {
-	private static final Logger log = LoggerFactory.getLogger(Ticket.class);
+public class TicketEntity {
+	private static final Logger log = LoggerFactory.getLogger(TicketEntity.class);
 	
 	@Id
 	@Column(name = "id")
@@ -31,14 +31,14 @@ public class Ticket {
 	
 	@ManyToOne
 	@JoinColumn(name = "ticket_status_id")
-	private TicketStatus status;
+	private TicketStatusEntity status;
 	
 	@Column(name = "customer_username")
 	private String customerUsername;
 	
 	@ManyToOne
 	@JoinColumn(name = "ticket_category_id")
-	private TicketCategory category;
+	private TicketCategoryEntity category;
 	
 	@Column(name = "description")
 	private String description;
@@ -51,9 +51,9 @@ public class Ticket {
 	@SuppressWarnings("unused")
 	private void setId(Long id) { this.id = id; }
 	
-	public TicketStatus getStatus() { return status; }
+	public TicketStatusEntity getStatus() { return status; }
 	
-	public void setStatus(TicketStatus status) { this.status = status; }
+	public void setStatus(TicketStatusEntity status) { this.status = status; }
 
 //	@NotNull
 	@Size(min = 1, max = 20)
@@ -65,9 +65,9 @@ public class Ticket {
 	}
 	
 //	@NotNull
-	public TicketCategory getCategory() { return category; }
+	public TicketCategoryEntity getCategory() { return category; }
 	
-	public void setCategory(TicketCategory category) { this.category = category; }
+	public void setCategory(TicketCategoryEntity category) { this.category = category; }
 	
 	@NotNull
 	@Size(min = 1, max = 4000)
@@ -98,7 +98,7 @@ public class Ticket {
 		if (obj == null) { return false; }
 		if (getClass() != obj.getClass()) { return false; }
 		
-		Ticket other = (Ticket) obj;
+		TicketEntity other = (TicketEntity) obj;
 		
 		if (category == null) {
 			if (other.category != null) { return false; }

@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ticket_category")
-public class TicketCategory {
+public class TicketCategoryEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,9 +27,15 @@ public class TicketCategory {
 	
 	public Long getId() { return id; }
 	
+	public void setId(Long id) { this.id = id; }
+	
 	public String getKey() { return key; }
 	
+	public void setKey(String key) { this.key = key; }
+	
 	public String getName() { return name; }
+	
+	public void setName(String name) { this.name = name; }
 	
 	@Override
 	public int hashCode() {
@@ -47,7 +53,7 @@ public class TicketCategory {
 		if (obj == null) { return false; }
 		if (getClass() != obj.getClass()) { return false; }
 		
-		TicketCategory other = (TicketCategory) obj;
+		TicketCategoryEntity other = (TicketCategoryEntity) obj;
 		
 		if (id == null) {
 			if (other.id != null) { return false; }
@@ -72,6 +78,6 @@ public class TicketCategory {
 
 	@Override
 	public String toString() {
-		return "TicketCategory [id=" + id + ", key=" + key + ", name=" + name + "]";
+		return "TicketCategoryEntity [id=" + id + ", key=" + key + ", name=" + name + "]";
 	}
 }

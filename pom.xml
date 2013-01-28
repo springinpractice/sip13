@@ -6,21 +6,21 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>com.springinpractice</groupId>
-	<artifactId>com.springinpractice.13_02</artifactId>
+	<artifactId>com.springinpractice.13_03</artifactId>
 	<version>1.0-RELEASE</version>
 	<packaging>pom</packaging>
 	
-	<name>Spring in Practice Recipe 13.2</name>
+	<name>Spring in Practice Recipe 13.3</name>
 	<description>
-		Recipe 13.2 shows how to add self-service ticketing to the portal application. Now both apps need customer
-		information, and both need ticket information. While we could just do the same thing we did in recipe 13.1
-		(namely, have both apps use both databases), this approach couples the database to the apps and over time makes
-		it harder to make database changes. So instead of doing that, instead we will implement bidirectional,
-		point-to-point service integration via REST: the portal app gets ticket categories from the help desk app and
-		also posts new tickets to the help desk app, while the help desk app gets customer data from the portal app. 
+		From a user's perspective, the help desk and portal apps in recipe 13.3 are identical to those from recipe
+		13.2. Behind the scenes, however, we pursue further decoupling between the apps. We remove the point-to-point
+		REST calls, and replace them instead with AMQP messaging backed by RabbitMQ. We use Spring Integration to
+		translate between app-specific representations and a canonical data model, as well as to provide support for
+		AMQP-based communication.
 	</description>
 	
 	<modules>
+		<module>cdm</module>
 		<module>helpdesk</module>
 		<module>portal</module>
 	</modules>
@@ -46,8 +46,9 @@
 		<spring.data.jpa.version>1.2.0.RC1</spring.data.jpa.version>
 		<spring.data.rest.webmvc.version>1.0.0.RC3</spring.data.rest.webmvc.version>
 		<spring.hateoas.version>0.3.0.RELEASE</spring.hateoas.version>
-		<spring.security.version>3.1.2.RELEASE</spring.security.version>
-		<spring.version>3.1.2.RELEASE</spring.version>
+		<spring.integration.version>2.2.0.RELEASE</spring.integration.version>
+		<spring.security.version>3.1.3.RELEASE</spring.security.version>
+		<spring.version>3.1.3.RELEASE</spring.version>
 		<tiles.version>2.2.2</tiles.version>
 	</properties>
 	
@@ -175,7 +176,24 @@
 				<artifactId>spring-hateoas</artifactId>
 				<version>${spring.hateoas.version}</version>
 			</dependency>
-		
+			
+			<!-- Spring Integration -->
+			<dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-core</artifactId>
+				<version>${spring.integration.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-amqp</artifactId>
+				<version>${spring.integration.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-xml</artifactId>
+				<version>${spring.integration.version}</version>
+			</dependency>
+			
 			<!-- Spring Security -->
 			<dependency>
 				<groupId>org.springframework.security</groupId>

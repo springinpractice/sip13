@@ -7,23 +7,123 @@ beans-integration.xml
 Copyright (c) 2008-2012 Manning Publications Co.
 
 Willie Wheeler (willie.wheeler@gmail.com)
+
+http://www.rabbitmq.com/amqp-0-9-1-reference.html
 ========================================================================================================================
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:int-amqp="http://www.springframework.org/schema/integration/amqp"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/integration
+		http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
+		http://www.springframework.org/schema/integration/amqp
+		http://www.springframework.org/schema/integration/amqp/spring-integration-amqp-2.2.xsd
+		http://www.springframework.org/schema/oxm
+		http://www.springframework.org/schema/oxm/spring-oxm-3.1.xsd
+		http://www.springframework.org/schema/rabbit
+		http://www.springframework.org/schema/rabbit/spring-rabbit-1.1.xsd
 		">
 	
-	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
 	
-	<bean class="com.springinpractice.ch13.portal.integration.gateway.impl.TicketGatewayImpl">
-		<constructor-arg ref="restTemplate" />
-		<constructor-arg value="${helpDeskUrl}" />
+	<!-- =========================================================================================================== -->
+	<!-- Rabbit                                                                                                      -->
+	<!-- =========================================================================================================== -->
+	
+	<rabbit:connection-factory id="rabbitConnectionFactory" username="guest" password="guest" />
+	
+	<!-- The <rabbit:admin/> declaration by default automatically looks for beans of type Queue, Exchange and Binding
+	     and declares them to the broker on behalf of the user. -->
+	<rabbit:admin connection-factory="rabbitConnectionFactory" />
+	
+	<!-- http://static.springsource.org/spring-amqp/reference/html/amqp.html#d4e288 -->
+	<rabbit:template id="amqpTemplate"
+		connection-factory="rabbitConnectionFactory"
+		message-converter="marshallingMessageConverter" />
+		
+	<bean id="marshallingMessageConverter"
+		class="org.springframework.amqp.support.converter.MarshallingMessageConverter"
+		p:contentType="application/xml">
+		
+		<constructor-arg ref="marshaller" />
 	</bean>
+	
+	<oxm:jaxb2-marshaller id="marshaller">
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.DummyPayload" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.Ticket" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategory" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategory$TicketCategoryList" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategoryRequest" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatus" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatusRequest" />
+	</oxm:jaxb2-marshaller>
+	
+	<rabbit:queue name="createTicketRequest.queue" />
+	<rabbit:queue name="findTicketStatusRequest.queue" />
+	<rabbit:queue name="findTicketCategoriesRequest.queue" />
+	<rabbit:queue name="findTicketCategoryRequest.queue" />
+	
+	
+	<!-- =========================================================================================================== -->
+	<!-- Spring Integration                                                                                          -->
+	<!-- =========================================================================================================== -->
+	
+	<!-- Gateway auto-creates a temporary, anonymous reply channel and listens for the reply. -->
+	<!-- FIXME Define error channel on the gateway -->
+	<int:gateway
+		service-interface="com.springinpractice.ch13.portal.integration.gateway.TicketGateway"
+		default-request-channel="helpDeskRequestChannel"
+		default-request-timeout="2000"
+		default-reply-timeout="2000">
+		
+		<int:method name="createTicket" request-channel="createTicketRequestChannel" />
+		
+		<!-- http://static.springsource.org/spring-integration/docs/2.2.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods -->
+		<int:method name="findOpenTicketStatus" payload-expression="new com.springinpractice.ch13.cdm.TicketStatusRequest('open')">
+			<!-- This Spring Integration header maps to an AMQP header -->
+			<int:header name="requestType" value="findTicketStatusRequest" />
+		</int:method>
+		<int:method name="findTicketCategories" payload-expression="new com.springinpractice.ch13.cdm.DummyPayload()">
+			<int:header name="requestType" value="findTicketCategoriesRequest" />
+		</int:method>
+		<int:method name="findTicketCategory" request-channel="findTicketCategoryRequestChannel">
+			<int:header name="requestType" value="findTicketCategoryRequest" />
+		</int:method>
+	</int:gateway>
+	
+	<!-- Create ticket (request only) -->
+	<int:channel id="createTicketRequestChannel" />
+	
+	<int-amqp:outbound-channel-adapter
+		amqp-template="amqpTemplate"
+		channel="createTicketRequestChannel"
+		routing-key="createTicketRequest.queue" />
+	
+	<!-- Find ticket category -->
+	<int:channel id="findTicketCategoryRequestChannel" />
+	
+	<int:transformer
+		input-channel="findTicketCategoryRequestChannel"
+		output-channel="helpDeskRequestChannel"
+		expression="new com.springinpractice.ch13.cdm.TicketCategoryRequest(payload)" />
+	
+	<!-- General gateway (request/reply) -->
+	<int:channel id="helpDeskRequestChannel" />
+	
+	<!-- mapped-request-headers="type" passes along our "type" SI message header as an AMQP custom message property -->
+	<int-amqp:outbound-gateway
+		amqp-template="amqpTemplate"
+		request-channel="helpDeskRequestChannel"
+		routing-key-expression="headers['requestType'] + '.queue'"
+		mapped-request-headers="requestType" />
+			
 </beans>

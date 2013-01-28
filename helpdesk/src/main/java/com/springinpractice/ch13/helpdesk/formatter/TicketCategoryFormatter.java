@@ -10,32 +10,32 @@ import org.slf4j.LoggerFactory;
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
 
-import com.springinpractice.ch13.helpdesk.model.TicketCategory;
+import com.springinpractice.ch13.helpdesk.model.TicketCategoryEntity;
 import com.springinpractice.ch13.helpdesk.repo.TicketCategoryRepository;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @Component
-public class TicketCategoryFormatter implements Formatter<TicketCategory> {
+public class TicketCategoryFormatter implements Formatter<TicketCategoryEntity> {
 	private static final Logger log = LoggerFactory.getLogger(TicketCategoryFormatter.class);
 	
 	@Inject private TicketCategoryRepository ticketCategoryRepo;
 
 	@Override
-	public String print(TicketCategory category, Locale locale) {
-		log.debug("Printing TicketCategory: {}", category);
+	public String print(TicketCategoryEntity category, Locale locale) {
+		log.debug("Printing TicketCategoryEntity: {}", category);
 		return category.getId().toString();
 	}
 
 	@Override
-	public TicketCategory parse(String id, Locale locale) throws ParseException {
-		log.debug("Parsing TicketCategory: id={}", id);
+	public TicketCategoryEntity parse(String id, Locale locale) throws ParseException {
+		log.debug("Parsing TicketCategoryEntity: id={}", id);
 		
-		// Note that this method needs to parse the ID into a TicketCategory that equals() one of the TicketCategory
-		// instances in the dropdown, or else form field prepopulation won't work. Here we're loading the TicketCategory
+		// Note that this method needs to parse the ID into a TicketCategoryEntity that equals() one of the TicketCategoryEntity
+		// instances in the dropdown, or else form field prepopulation won't work. Here we're loading the TicketCategoryEntity
 		// from the repo since the equals() method takes all fields into account. But if the equals() implementation
-		// used only the ID, then we'd be able to create an empty TicketCategory with only the ID set and it woulnd work
+		// used only the ID, then we'd be able to create an empty TicketCategoryEntity with only the ID set and it woulnd work
 		// fine.
 		return ticketCategoryRepo.findOne(Long.parseLong(id));
 	}

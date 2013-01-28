@@ -1,24 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-========================================================================================================================
-beans-integration.xml
-
-Copyright (c) 2008-2012 Manning Publications Co.
-
-Willie Wheeler (willie.wheeler@gmail.com)
-========================================================================================================================
--->
+<!-- http://www.rabbitmq.com/amqp-0-9-1-reference.html -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-amqp="http://www.springframework.org/schema/integration/amqp"
+	xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/integration
+		http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
+		http://www.springframework.org/schema/integration/amqp
+		http://www.springframework.org/schema/integration/amqp/spring-integration-amqp-2.2.xsd
+		http://www.springframework.org/schema/integration/xml
+		http://www.springframework.org/schema/integration/xml/spring-integration-xml-2.2.xsd
+		http://www.springframework.org/schema/oxm
+		http://www.springframework.org/schema/oxm/spring-oxm-3.1.xsd
+		http://www.springframework.org/schema/rabbit
+		http://www.springframework.org/schema/rabbit/spring-rabbit-1.1.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd
 		">
+	
+<!-- 	<int:annotation-config /> -->
+	
+	
+	<!-- =========================================================================================================== -->
+	<!-- Rabbit                                                                                                      -->
+	<!-- =========================================================================================================== -->
+	
+	<rabbit:connection-factory id="rabbitConnectionFactory" username="guest" password="guest" />
+	
+	<!-- The <rabbit:admin/> declaration by default automatically looks for beans of type Queue, Exchange and Binding
+	     and declares them to the broker on behalf of the user. -->
+	<rabbit:admin connection-factory="rabbitConnectionFactory" />
+	
+	<rabbit:queue name="createTicketRequest.queue" />
+	<rabbit:queue name="findTicketStatusRequest.queue" />
+	<rabbit:queue name="findTicketCategoriesRequest.queue" />
+	<rabbit:queue name="findTicketCategoryRequest.queue" />
+	
+	
+	<!-- =========================================================================================================== -->
+	<!-- Spring Integration                                                                                          -->
+	<!-- =========================================================================================================== -->
+	
+	<context:component-scan base-package="com.springinpractice.ch13.helpdesk.integration.transformer" />
+	
+	<!-- From AMQP to SI -->
+	<int-amqp:inbound-channel-adapter
+		queue-names="createTicketRequest.queue"
+		channel="createTicketRequestChannel"
+		message-converter="marshallingMessageConverter" />
+	
+	<!-- Create ticket -->
+	<int:channel id="createTicketRequestChannel" />
+	
+	<int:chain input-channel="createTicketRequestChannel">
+		<int:transformer ref="ticketTransformer" method="toEntity" />
+		<int:service-activator expression="@ticketRepository.save(payload)" />
+		<int:filter expression="false" />
+	</int:chain>
+	
+<!-- 	<int:transformer -->
+<!-- 		input-channel="createTicketRequestChannel" -->
+<!-- 		output-channel="createTicketEntityRequestChannel" -->
+<!-- 		ref="ticketTransformer" -->
+<!-- 		method="toEntity" /> -->
+	
+<!-- 	<int:channel id="createTicketEntityRequestChannel" /> -->
+	
+<!-- 	<int:service-activator -->
+<!-- 		input-channel="createTicketEntityRequestChannel" -->
+<!-- 		expression="@ticketRepository.save(payload)" /> -->
+		
+	<!-- From AMQP to SI -->
+	<!-- http://static.springsource.org/spring-integration/api/org/springframework/integration/amqp/inbound/AmqpInboundGateway.html -->
+	<!-- mapped-request-headers="requestType" passes along our "requestType" AMQP custom message property as a custom SI message header -->
+	<int-amqp:inbound-gateway
+		queue-names="findTicketStatusRequest.queue,findTicketCategoriesRequest.queue,findTicketCategoryRequest.queue"
+		request-channel="helpDeskRequestChannel"
+		mapped-request-headers="requestType" 
+		message-converter="marshallingMessageConverter" />
+	
+	<int:channel id="helpDeskRequestChannel" />
+	
+	<!-- http://forum.springsource.org/showthread.php?125777-keeping-default-headers-in-amqp-outbound-channel-adapters -->
+	<int:header-value-router input-channel="helpDeskRequestChannel" header-name="requestType">
+		<int:mapping value="findTicketStatusRequest" channel="findTicketStatusRequestChannel" />
+		<int:mapping value="findTicketCategoriesRequest" channel="findTicketCategoriesRequestChannel" />
+		<int:mapping value="findTicketCategoryRequest" channel="findTicketCategoryRequestChannel" />
+	</int:header-value-router>
+	
+	<!-- Find ticket statuses -->
+	<int:channel id="findTicketStatusRequestChannel" />
+	
+	<int:chain input-channel="findTicketStatusRequestChannel">
+		<int:service-activator expression="@ticketStatusRepository.findByKey(payload.key)" />
+		<int:transformer ref="ticketStatusTransformer" method="toDto" />
+	</int:chain>
+	
+	<!-- Find ticket categories -->
+	<int:channel id="findTicketCategoriesRequestChannel" />
+	
+	<int:chain input-channel="findTicketCategoriesRequestChannel">
+		<int:service-activator expression="@ticketCategoryRepository.findAll()" />
+		<int:transformer ref="ticketCategoryListTransformer" method="toDto" />
+	</int:chain>
+	
+	<!-- Find ticket category -->
+	<int:channel id="findTicketCategoryRequestChannel" />
+	
+	<int:chain input-channel="findTicketCategoryRequestChannel">
+		<int:service-activator expression="@ticketCategoryRepository.findOne(payload.id)" />
+		<int:transformer ref="ticketCategoryTransformer" method="toDto" />
+	</int:chain>
+	
+	<!-- XML -->
+	<!-- Set content type here or else it will be application/octet-stream -->
+	<bean id="marshallingMessageConverter"
+		class="org.springframework.amqp.support.converter.MarshallingMessageConverter"
+		p:contentType="application/xml">
+		
+		<constructor-arg ref="marshaller" />
+	</bean>
+	
+	<oxm:jaxb2-marshaller id="marshaller">
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.DummyPayload" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.Ticket" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategory" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategory$TicketCategoryList" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategoryRequest" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatus" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatusRequest" />
+	</oxm:jaxb2-marshaller>
+	
+	
+	<!-- =========================================================================================================== -->
+	<!-- =========================================================================================================== -->
 	
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
 	

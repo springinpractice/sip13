@@ -1,21 +1,20 @@
 package com.springinpractice.ch13.portal.integration.gateway;
 
-import java.util.List;
-
-import com.springinpractice.ch13.portal.integration.resource.TicketCategoryResource;
-import com.springinpractice.ch13.portal.integration.resource.TicketResource;
-import com.springinpractice.ch13.portal.integration.resource.TicketStatusResource;
+import com.springinpractice.ch13.cdm.Ticket;
+import com.springinpractice.ch13.cdm.TicketCategory;
+import com.springinpractice.ch13.cdm.TicketCategory.TicketCategoryList;
+import com.springinpractice.ch13.cdm.TicketStatus;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 public interface TicketGateway {
 	
-	void createTicket(TicketResource ticket);
+	void createTicket(Ticket ticket);
 	
-	TicketStatusResource findOpenTicketStatus();
+	TicketStatus findOpenTicketStatus();
 	
-	List<TicketCategoryResource> findTicketCategories();
+	TicketCategoryList findTicketCategories();
 	
-	TicketCategoryResource findTicketCategory(String uri);
+	TicketCategory findTicketCategory(Long id);
 }

@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.hateoas.Link;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +20,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.springinpractice.ch13.cdm.Ticket;
+import com.springinpractice.ch13.cdm.TicketCategory;
+import com.springinpractice.ch13.cdm.TicketStatus;
 import com.springinpractice.ch13.portal.integration.gateway.TicketGateway;
-import com.springinpractice.ch13.portal.integration.resource.TicketCategoryResource;
-import com.springinpractice.ch13.portal.integration.resource.TicketResource;
-import com.springinpractice.ch13.portal.integration.resource.TicketStatusResource;
 import com.springinpractice.ch13.portal.model.User;
 import com.springinpractice.ch13.portal.web.util.ModelKeys;
 import com.springinpractice.ch13.portal.web.util.ViewKeys;
@@ -39,12 +38,16 @@ public class TicketController implements InitializingBean {
 	
 	@Inject private TicketGateway ticketGateway;
 	
-	private Link statusLink;
+	private TicketStatus status;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		TicketStatusResource status = ticketGateway.findOpenTicketStatus();
-		this.statusLink = status.getLink("self");
+		log.info("Getting open ticket status from ticket gateway");
+		this.status = ticketGateway.findOpenTicketStatus();
+		if (this.status == null) {
+			throw new IllegalStateException("Failed to load open ticket status");
+		}
+		log.debug("ticketStatus={}", status.getName());
 	}
 	
 	@InitBinder
@@ -55,13 +58,13 @@ public class TicketController implements InitializingBean {
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String getNewTicketForm(Model model) {
 		log.debug("Getting new ticket form");
-		model.addAttribute(ModelKeys.TICKET, new TicketResource());
+		model.addAttribute(ModelKeys.TICKET, new Ticket());
 		return prepareNewTicketForm(model);
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String postTicket(
-			@ModelAttribute(ModelKeys.TICKET) @Valid TicketResource ticket,
+			@ModelAttribute(ModelKeys.TICKET) @Valid Ticket ticket,
 			BindingResult result,
 			Model model) {
 		
@@ -74,10 +77,10 @@ public class TicketController implements InitializingBean {
 		}
 		
 		log.debug("Ticket is valid");
-		ticket.setStatus(statusLink);
+		ticket.setStatus(status);
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ticket.setUsername(user.getUsername());
+		ticket.setCreatedBy(user.getUsername());
 		ticket.setDateCreated(new Date());
 		
 		ticketGateway.createTicket(ticket);
@@ -85,7 +88,7 @@ public class TicketController implements InitializingBean {
 	}
 	
 	private String prepareNewTicketForm(Model model) {
-		List<TicketCategoryResource> categories = ticketGateway.findTicketCategories();
+		List<TicketCategory> categories = ticketGateway.findTicketCategories().getElements();
 		model.addAttribute(ModelKeys.TICKET_CATEGORY_LIST, categories);
 		return ViewKeys.NEW_TICKET;
 	}

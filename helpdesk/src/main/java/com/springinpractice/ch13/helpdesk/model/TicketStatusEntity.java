@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ticket_status")
-public class TicketStatus {
+public class TicketStatusEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,8 +27,7 @@ public class TicketStatus {
 	
 	public Long getId() { return id; }
 	
-	@SuppressWarnings("unused")
-	private void setId(Long id) { this.id = id; }
+	public void setId(Long id) { this.id = id; }
 	
 	public String getKey() { return key; }
 	
@@ -54,7 +53,7 @@ public class TicketStatus {
 		if (obj == null) { return false; }
 		if (getClass() != obj.getClass()) { return false; }
 		
-		TicketStatus other = (TicketStatus) obj;
+		TicketStatusEntity other = (TicketStatusEntity) obj;
 		
 		if (id == null) {
 			if (other.id != null) { return false; }
