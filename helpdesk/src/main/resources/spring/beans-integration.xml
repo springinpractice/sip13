@@ -50,6 +50,29 @@
 	
 	
 	<!-- =========================================================================================================== -->
+	<!-- OXM                                                                                                         -->
+	<!-- =========================================================================================================== -->
+	
+	<!-- Set content type here or else it will be application/octet-stream -->
+	<bean id="marshallingMessageConverter"
+		class="org.springframework.amqp.support.converter.MarshallingMessageConverter"
+		p:contentType="application/xml">
+		
+		<constructor-arg ref="marshaller" />
+	</bean>
+	
+	<oxm:jaxb2-marshaller id="marshaller">
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.DummyPayload" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.Ticket" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategory" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategory$TicketCategoryList" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategoryRequest" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatus" />
+		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatusRequest" />
+	</oxm:jaxb2-marshaller>
+	
+	
+	<!-- =========================================================================================================== -->
 	<!-- Spring Integration                                                                                          -->
 	<!-- =========================================================================================================== -->
 	
@@ -64,23 +87,10 @@
 	<!-- Create ticket -->
 	<int:channel id="createTicketRequestChannel" />
 	
-	<int:chain input-channel="createTicketRequestChannel">
+	<int:chain input-channel="createTicketRequestChannel" output-channel="nullChannel">
 		<int:transformer ref="ticketTransformer" method="toEntity" />
 		<int:service-activator expression="@ticketRepository.save(payload)" />
-		<int:filter expression="false" />
 	</int:chain>
-	
-<!-- 	<int:transformer -->
-<!-- 		input-channel="createTicketRequestChannel" -->
-<!-- 		output-channel="createTicketEntityRequestChannel" -->
-<!-- 		ref="ticketTransformer" -->
-<!-- 		method="toEntity" /> -->
-	
-<!-- 	<int:channel id="createTicketEntityRequestChannel" /> -->
-	
-<!-- 	<int:service-activator -->
-<!-- 		input-channel="createTicketEntityRequestChannel" -->
-<!-- 		expression="@ticketRepository.save(payload)" /> -->
 		
 	<!-- From AMQP to SI -->
 	<!-- http://static.springsource.org/spring-integration/api/org/springframework/integration/amqp/inbound/AmqpInboundGateway.html -->
@@ -91,7 +101,13 @@
 		mapped-request-headers="requestType" 
 		message-converter="marshallingMessageConverter" />
 	
-	<int:channel id="helpDeskRequestChannel" />
+	<int:channel id="helpDeskRequestChannel">
+		<int:interceptors>
+			<int:wire-tap channel="logger" />
+		</int:interceptors>
+	</int:channel>
+	
+	<int:logging-channel-adapter id="logger" level="DEBUG" log-full-message="true" />
 	
 	<!-- http://forum.springsource.org/showthread.php?125777-keeping-default-headers-in-amqp-outbound-channel-adapters -->
 	<int:header-value-router input-channel="helpDeskRequestChannel" header-name="requestType">
@@ -124,27 +140,9 @@
 		<int:transformer ref="ticketCategoryTransformer" method="toDto" />
 	</int:chain>
 	
-	<!-- XML -->
-	<!-- Set content type here or else it will be application/octet-stream -->
-	<bean id="marshallingMessageConverter"
-		class="org.springframework.amqp.support.converter.MarshallingMessageConverter"
-		p:contentType="application/xml">
-		
-		<constructor-arg ref="marshaller" />
-	</bean>
-	
-	<oxm:jaxb2-marshaller id="marshaller">
-		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.DummyPayload" />
-		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.Ticket" />
-		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategory" />
-		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategory$TicketCategoryList" />
-		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketCategoryRequest" />
-		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatus" />
-		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatusRequest" />
-	</oxm:jaxb2-marshaller>
-	
 	
 	<!-- =========================================================================================================== -->
+	<!-- FIXME: Replace this with AMQP-based integration                                                             -->
 	<!-- =========================================================================================================== -->
 	
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />

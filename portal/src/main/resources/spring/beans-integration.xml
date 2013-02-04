@@ -12,18 +12,15 @@ http://www.rabbitmq.com/amqp-0-9-1-reference.html
 ========================================================================================================================
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-amqp="http://www.springframework.org/schema/integration/amqp"
 	xmlns:oxm="http://www.springframework.org/schema/oxm"
 	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:int-amqp="http://www.springframework.org/schema/integration/amqp"
-	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/integration
 		http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
 		http://www.springframework.org/schema/integration/amqp
@@ -45,11 +42,21 @@ http://www.rabbitmq.com/amqp-0-9-1-reference.html
 	     and declares them to the broker on behalf of the user. -->
 	<rabbit:admin connection-factory="rabbitConnectionFactory" />
 	
+	<rabbit:queue name="createTicketRequest.queue" />
+	<rabbit:queue name="findTicketStatusRequest.queue" />
+	<rabbit:queue name="findTicketCategoriesRequest.queue" />
+	<rabbit:queue name="findTicketCategoryRequest.queue" />
+	
 	<!-- http://static.springsource.org/spring-amqp/reference/html/amqp.html#d4e288 -->
 	<rabbit:template id="amqpTemplate"
 		connection-factory="rabbitConnectionFactory"
 		message-converter="marshallingMessageConverter" />
+	
 		
+	<!-- =========================================================================================================== -->
+	<!-- OXM                                                                                                         -->
+	<!-- =========================================================================================================== -->
+	
 	<bean id="marshallingMessageConverter"
 		class="org.springframework.amqp.support.converter.MarshallingMessageConverter"
 		p:contentType="application/xml">
@@ -66,11 +73,6 @@ http://www.rabbitmq.com/amqp-0-9-1-reference.html
 		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatus" />
 		<oxm:class-to-be-bound name="com.springinpractice.ch13.cdm.TicketStatusRequest" />
 	</oxm:jaxb2-marshaller>
-	
-	<rabbit:queue name="createTicketRequest.queue" />
-	<rabbit:queue name="findTicketStatusRequest.queue" />
-	<rabbit:queue name="findTicketCategoriesRequest.queue" />
-	<rabbit:queue name="findTicketCategoryRequest.queue" />
 	
 	
 	<!-- =========================================================================================================== -->
@@ -89,7 +91,6 @@ http://www.rabbitmq.com/amqp-0-9-1-reference.html
 		
 		<!-- http://static.springsource.org/spring-integration/docs/2.2.0.RELEASE/reference/html/messaging-endpoints-chapter.html#gateway-calling-no-argument-methods -->
 		<int:method name="findOpenTicketStatus" payload-expression="new com.springinpractice.ch13.cdm.TicketStatusRequest('open')">
-			<!-- This Spring Integration header maps to an AMQP header -->
 			<int:header name="requestType" value="findTicketStatusRequest" />
 		</int:method>
 		<int:method name="findTicketCategories" payload-expression="new com.springinpractice.ch13.cdm.DummyPayload()">

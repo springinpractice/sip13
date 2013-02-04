@@ -1,12 +1,10 @@
 package com.springinpractice.ch13.helpdesk.integration.resource;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.springframework.hateoas.ResourceSupport;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class CustomerResource extends ResourceSupport {
 	public String username;
 	public String firstName;
