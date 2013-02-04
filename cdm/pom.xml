@@ -5,10 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.springinpractice</groupId>
-		<artifactId>com.springinpractice.13_03</artifactId>
+		<artifactId>com.springinpractice.13_04</artifactId>
 		<version>1.0-RELEASE</version>
 	</parent>
-	<artifactId>com.springinpractice.13_03.cdm</artifactId>
+	<artifactId>com.springinpractice.13_04.cdm</artifactId>
 	
 	<dependencies>
 		<dependency>

@@ -6,12 +6,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.springinpractice</groupId>
-		<artifactId>com.springinpractice.13_03</artifactId>
+		<artifactId>com.springinpractice.13_04</artifactId>
 		<version>1.0-RELEASE</version>
 	</parent>
-	<artifactId>com.springinpractice.13_03.helpdesk</artifactId>
+	<artifactId>com.springinpractice.13_04.helpdesk</artifactId>
 	<packaging>war</packaging>
-	<name>Spring in Practice Recipe 13.3 - Help Desk</name>
+	<name>Spring in Practice Recipe 13.4 - Help Desk</name>
 	<url>http://springinpractice.com/</url>
 	
 	<properties>
@@ -21,7 +21,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>com.springinpractice.13_03.cdm</artifactId>
+			<artifactId>com.springinpractice.13_04.cdm</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
@@ -29,6 +29,10 @@
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -89,6 +93,10 @@
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-amqp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-mail</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.integration</groupId>

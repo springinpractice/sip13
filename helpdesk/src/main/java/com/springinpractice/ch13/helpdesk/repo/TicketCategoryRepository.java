@@ -10,4 +10,6 @@ import com.springinpractice.ch13.helpdesk.model.TicketCategoryEntity;
  */
 @RestResource(path = "ticketcategories")
 public interface TicketCategoryRepository extends JpaRepository<TicketCategoryEntity, Long> {
+	
+	TicketCategoryEntity findByKey(String key);
 }

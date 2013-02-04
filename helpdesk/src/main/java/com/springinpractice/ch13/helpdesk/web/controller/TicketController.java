@@ -131,9 +131,15 @@ public class TicketController implements InitializingBean {
 	@RequestMapping(value = "/tickets/{id}", method = RequestMethod.GET)
 	public String getTicketDetails(@PathVariable Long id, Model model) {
 		TicketEntity ticket = ticketRepo.findOne(id);
-		CustomerResource customer = portalGateway.findCustomerByUsername(ticket.getCustomerUsername());
+		
+		// Modified for recipe 13.4.
+		String customerUsername = ticket.getCustomerUsername();
+		if (customerUsername != null) {
+			CustomerResource customer = portalGateway.findCustomerByUsername(customerUsername);
+			model.addAttribute(ModelKeys.CUSTOMER, customer);
+		}
+		
 		model.addAttribute("ticket", ticket);
-		model.addAttribute(ModelKeys.CUSTOMER, customer);
 		return ViewKeys.TICKET_DETAILS;
 	}
 }
