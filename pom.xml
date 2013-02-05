@@ -6,13 +6,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>com.springinpractice</groupId>
-	<artifactId>com.springinpractice.13_04</artifactId>
+	<artifactId>com.springinpractice.13_05</artifactId>
 	<version>1.0-RELEASE</version>
 	<packaging>pom</packaging>
 	
-	<name>Spring in Practice Recipe 13.4</name>
+	<name>Spring in Practice Recipe 13.5</name>
 	<description>
-		Recipe 13.4 shows how to source tickets from an IMAP store.
+		Recipe 13.5 shows how to use Spring Integration to send confirmation messages via SMTP.
 	</description>
 	
 	<modules>

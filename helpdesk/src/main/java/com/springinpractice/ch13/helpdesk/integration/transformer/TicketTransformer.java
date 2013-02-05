@@ -10,6 +10,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailMessage;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
 import com.springinpractice.ch13.cdm.Ticket;
@@ -28,6 +31,12 @@ public class TicketTransformer {
 	
 	@Inject private TicketCategoryTransformer ticketCategoryTransformer;
 	@Inject private TicketStatusTransformer ticketStatusTransformer;
+	
+	@Value("${confirmation.from}")
+	private String confirmationFrom;
+	
+	@Value("${confirmation.subject}")
+	private String confirmationSubject;
 	
 	private TicketCategory generalCategoryDto;
 	private TicketStatus openStatusDto;
@@ -49,6 +58,15 @@ public class TicketTransformer {
 		ticketEntity.setDescription(ticketDto.getDescription());
 		ticketEntity.setStatus(ticketStatusTransformer.toEntity(ticketDto.getStatus()));
 		return ticketEntity;
+	}
+	
+	// Recipe 13.5
+	public MailMessage toMailMessage(Ticket ticketDto) {
+		MailMessage msg = new SimpleMailMessage();
+		
+		// TODO Need customer e-mail address.
+		
+		return msg;
 	}
 	
 	// Recipe 13.4
