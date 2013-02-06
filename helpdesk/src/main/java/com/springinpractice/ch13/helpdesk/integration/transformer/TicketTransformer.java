@@ -53,7 +53,7 @@ public class TicketTransformer {
 			ticketEntity.setCustomerUsername(username);
 		} else {
 			ticketEntity.setCustomerEmail(customerDto.getEmail());
-			ticketEntity.setCustomerFullName(customerDto.getFirstName() + " " + customerDto.getLastName());
+			ticketEntity.setCustomerFullName(getFullName(customerDto));
 		}
 		
 		ticketEntity.setDateCreated(ticketDto.getDateCreated());
@@ -84,5 +84,15 @@ public class TicketTransformer {
 		ticketDto.setDescription("[" + email.getSubject() + "] " + body.getContent());
 		ticketDto.setStatus(openStatusDto);
 		return ticketDto;
+	}
+	
+	private String getFullName(Customer customerDto) {
+		String firstName = customerDto.getFirstName();
+		String lastName = customerDto.getLastName();
+		if (firstName == null) {
+			return (lastName == null ? "[Unknown]" : lastName).trim();
+		} else {
+			return (lastName == null ? firstName : firstName + " " + lastName).trim();
+		}
 	}
 }
