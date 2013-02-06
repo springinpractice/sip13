@@ -52,9 +52,8 @@ public class TicketTransformer {
 		if (username != null) {
 			ticketEntity.setCustomerUsername(username);
 		} else {
-			// TODO
-//			ticketEntity.setCustomerEmail(customerDto.getEmail());
-//			ticketEntity.setCustomerFullName(customerDto.getFirstName() + " " + customerDto.getLastName());
+			ticketEntity.setCustomerEmail(customerDto.getEmail());
+			ticketEntity.setCustomerFullName(customerDto.getFirstName() + " " + customerDto.getLastName());
 		}
 		
 		ticketEntity.setDateCreated(ticketDto.getDateCreated());
@@ -73,11 +72,16 @@ public class TicketTransformer {
 		
 		Ticket ticketDto = new Ticket();
 		ticketDto.setCategory(generalCategoryDto);
+		
+		// We don't really know whether the personal name is first, last or what, so just use the last name for now.
+		Customer customerDto = new Customer();
+		customerDto.setEmail(from.getAddress());
+		customerDto.setFirstName(null);
+		customerDto.setLastName(from.getPersonal());
+		ticketDto.setCreatedBy(customerDto);
+		
 		ticketDto.setDateCreated(email.getSentDate());
-		ticketDto.setDescription(
-				"From: " + from.getPersonal() + " <" + from.getAddress() + ">" +
-				"\nSubject: " + email.getSubject() +
-				"\n\n" + body.getContent());
+		ticketDto.setDescription("[" + email.getSubject() + "] " + body.getContent());
 		ticketDto.setStatus(openStatusDto);
 		return ticketDto;
 	}
