@@ -17,8 +17,14 @@ public class ModelKeys {
 	/** Current node's key */
 	public static final String NODE_KEY = "nodeKey";
 	
-	/** Map [username -&gt; customer] */
-	public static final String CUSTOMER_MAP = "customerMap";
+	public static final String TICKET = "ticket";
+	
+	public static final String TICKETS = "ticketList";
+	
+	public static final String TICKET_CATEGORIES = "ticketCategoryList";
 	
 	public static final String CUSTOMER = "customer";
+	
+	/** Map [username -&gt; customer] */
+	public static final String CUSTOMER_MAP = "customerMap";
 }

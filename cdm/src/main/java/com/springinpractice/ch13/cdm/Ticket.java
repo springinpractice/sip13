@@ -12,7 +12,7 @@ public class Ticket {
 	private TicketCategory category;
 	private TicketStatus status;
 	private String description;
-	private String createdBy;
+	private Customer createdBy;
 	private Date dateCreated;
 	
 	public TicketCategory getCategory() { return category; }
@@ -27,9 +27,9 @@ public class Ticket {
 	
 	public void setDescription(String description) { this.description = description; }
 	
-	public String getCreatedBy() { return createdBy; }
+	public Customer getCreatedBy() { return createdBy; }
 	
-	public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+	public void setCreatedBy(Customer createdBy) { this.createdBy = createdBy; }
 	
 	public Date getDateCreated() { return dateCreated; }
 	

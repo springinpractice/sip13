@@ -1,5 +1,12 @@
 TODOs for this chapter as there are some things I haven't cleaned up yet.
 
+- Fix validation error message that results when submitting an empty ticket from the portal. Right now it says
+
+Failed to convert property value of type java.lang.String to required type org.springframework.hateoas.Link for property
+category; nested exception is org.springframework.core.convert.ConversionFailedException: Failed to convert from type
+java.lang.String to type @javax.validation.constraints.NotNull org.springframework.hateoas.Link for value '; nested
+exception is java.lang.IllegalArgumentException: Href must not be null or empty!
+
 * Add findByKey() to the TicketCategoryRepository, going all the way back to recipe 13.1
 
 * Update 13.3 to get rid of the REST calls that the help desk app makes to the portal. Get rid of both the client and
@@ -8,7 +15,3 @@ TODOs for this chapter as there are some things I haven't cleaned up yet.
 
 * In recipe 13.3, replace the hardcoded Rabbit guest/guest credentials with property placeholder creds. Do this for
   both help desk and portal. Merge this forward.
-
-* Update the TicketController in earlier recipes to allow null customer usernames, as in recipe 13.4. Sometimes the
-  customer username will not be known as when somebody sends in an email. It could be that the support rep has to
-  resolve the username somehow, but it could be a prospective customer who doesn't even have a username.
