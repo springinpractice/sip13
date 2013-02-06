@@ -74,6 +74,16 @@ public class TicketEntity {
 	
 	public void setCustomerUsername(String customerUsername) { this.customerUsername = customerUsername; }
 	
+	@Size(min = 1, max = 80)
+	public String getCustomerEmail() { return customerEmail; }
+	
+	public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+	
+	@Size(min = 1, max = 80)
+	public String getCustomerFullName() { return customerFullName; }
+	
+	public void setCustomerFullName(String customerFullName) { this.customerFullName = customerFullName; }
+	
 	@NotNull
 	public TicketCategoryEntity getCategory() { return category; }
 	
