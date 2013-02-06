@@ -32,7 +32,9 @@ create table ticket_category (
 create table ticket (
     id mediumint(8) unsigned not null auto_increment primary key,
     ticket_status_id tinyint unsigned not null,
-    customer_username varchar(20) not null,
+    customer_username varchar(20),
+    customer_email varchar(80),
+    customer_full_name varchar(80),
     ticket_category_id tinyint unsigned not null,
     description text(4000) not null,
     date_created timestamp not null,

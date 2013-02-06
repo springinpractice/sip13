@@ -2,12 +2,12 @@ package com.springinpractice.ch13.helpdesk.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.springinpractice.ch13.helpdesk.model.TicketStatus;
+import com.springinpractice.ch13.helpdesk.model.TicketStatusEntity;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
-public interface TicketStatusRepository extends JpaRepository<TicketStatus, Long> {
+public interface TicketStatusRepository extends JpaRepository<TicketStatusEntity, Long> {
 	
-	TicketStatus findByKey(String key);
+	TicketStatusEntity findByKey(String key);
 }

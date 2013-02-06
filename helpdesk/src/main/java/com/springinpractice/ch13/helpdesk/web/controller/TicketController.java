@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.springinpractice.ch13.helpdesk.model.Ticket;
-import com.springinpractice.ch13.helpdesk.model.TicketStatus;
+import com.springinpractice.ch13.helpdesk.model.TicketEntity;
+import com.springinpractice.ch13.helpdesk.model.TicketStatusEntity;
 import com.springinpractice.ch13.helpdesk.model.TicketStatusKeys;
-import com.springinpractice.ch13.helpdesk.portal.model.Customer;
+import com.springinpractice.ch13.helpdesk.portal.model.CustomerEntity;
 import com.springinpractice.ch13.helpdesk.portal.repo.CustomerRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketCategoryRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketRepository;
@@ -48,7 +48,7 @@ public class TicketController implements InitializingBean {
 	@Inject private TicketStatusRepository ticketStatusRepo;
 	@Inject private CustomerRepository customerRepo;
 	
-	private TicketStatus openStatus;
+	private TicketStatusEntity openStatus;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -67,20 +67,20 @@ public class TicketController implements InitializingBean {
 	
 	@RequestMapping(value = "/tickets", method = RequestMethod.GET)
 	public String getTicketsHome(Model model) {
-		List<Ticket> tickets = ticketRepo.findAll();
-		model.addAttribute(tickets);
+		List<TicketEntity> tickets = ticketRepo.findAll();
+		model.addAttribute(ModelKeys.TICKETS, tickets);
 		model.addAttribute(ModelKeys.CUSTOMER_MAP, buildCustomerMap(tickets));
 		return ViewKeys.TICKETS_HOME;
 	}
 	
-	private Map<String, Customer> buildCustomerMap(List<Ticket> tickets) {
-		Map<String, Customer> customerMap = new HashMap<String, Customer>();
+	private Map<String, CustomerEntity> buildCustomerMap(List<TicketEntity> tickets) {
+		Map<String, CustomerEntity> customerMap = new HashMap<String, CustomerEntity>();
 		
 		List<String> usernames = new ArrayList<String>();
-		for (Ticket ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
+		for (TicketEntity ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
 		
-		List<Customer> customers = customerRepo.findByUsernameIn(usernames);
-		for (Customer customer : customers) { customerMap.put(customer.getUsername(), customer); }
+		List<CustomerEntity> customers = customerRepo.findByUsernameIn(usernames);
+		for (CustomerEntity customer : customers) { customerMap.put(customer.getUsername(), customer); }
 		
 		return customerMap;
 	}
@@ -92,18 +92,22 @@ public class TicketController implements InitializingBean {
 	
 	@RequestMapping(value = "/tickets/new", method = RequestMethod.GET)
 	public String getNewTicketForm(Model model) {
-		model.addAttribute(new Ticket());
+		model.addAttribute(ModelKeys.TICKET, new TicketEntity());
 		return prepareNewTicketForm(model);
 	}
 	
 	@RequestMapping(value = "/tickets", method = RequestMethod.POST)
-	public String postTicket(@ModelAttribute @Valid Ticket ticket, BindingResult result, Model model) {
+	public String postTicket(
+			@ModelAttribute(ModelKeys.TICKET) @Valid TicketEntity ticket,
+			BindingResult result,
+			Model model) {
+		
 		log.debug("Creating ticket: {}", ticket);
 		
 		// Additional customer username validation, if needed
 		if (!(result.hasFieldErrors("customerUsername"))) {
 			String username = ticket.getCustomerUsername();
-			Customer customer = customerRepo.findByUsername(username);
+			CustomerEntity customer = customerRepo.findByUsername(username);
 			if (customer == null) {
 				result.rejectValue("customerUsername", "error.noSuchCustomer");
 			}
@@ -119,20 +123,20 @@ public class TicketController implements InitializingBean {
 	}
 	
 	private String prepareNewTicketForm(Model model) {
-		model.addAttribute(ticketCategoryRepo.findAll());
+		model.addAttribute(ModelKeys.TICKETS, ticketCategoryRepo.findAll());
 		return ViewKeys.NEW_TICKET;
 	}
 	
 	
 	// =================================================================================================================
-	// Ticket details
+	// TicketEntity details
 	// =================================================================================================================
 	
 	@RequestMapping(value = "/tickets/{id}", method = RequestMethod.GET)
 	public String getTicketDetails(@PathVariable Long id, Model model) {
-		Ticket ticket = ticketRepo.findOne(id);
-		model.addAttribute(ticket);
-		model.addAttribute(customerRepo.findByUsername(ticket.getCustomerUsername()));
+		TicketEntity ticket = ticketRepo.findOne(id);
+		model.addAttribute(ModelKeys.TICKET, ticket);
+		model.addAttribute(ModelKeys.CUSTOMER, customerRepo.findByUsername(ticket.getCustomerUsername()));
 		return ViewKeys.TICKET_DETAILS;
 	}
 }

@@ -14,11 +14,23 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
+ * <p>
+ * The idea behind the customer-related fields in this class is as follows. If the username is available (e.g., an
+ * authenticated user submits a ticket), then we leave the e-mail address and full name blank, and look those up from
+ * the portal whenever we need them. That way we don't have to worry about keeping the e-mail and full name in sync
+ * with the authoritative customer data. If the username is *not* available (e.g., customer submitted an e-mail), then
+ * we leave the username blank, and we store the customer's e-mail address and (if available) full name.
+ * </p>
+ * <p>
+ * For right now all tickets have usernames, but in recipe 13.5 we'll have tickets from an e-mail channel where no
+ * username is available. Indeed the customer may be a prospective customer with no account and hence no username.
+ * </p>
+ * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @Entity
 @Table(name = "ticket")
-public class Ticket {
+public class TicketEntity {
 	
 	@Id
 	@Column(name = "id")
@@ -27,14 +39,20 @@ public class Ticket {
 	
 	@ManyToOne
 	@JoinColumn(name = "ticket_status_id")
-	private TicketStatus status;
+	private TicketStatusEntity status;
 	
 	@Column(name = "customer_username")
 	private String customerUsername;
 	
+	@Column(name = "customer_email")
+	private String customerEmail;
+	
+	@Column(name = "customer_full_name")
+	private String customerFullName;
+	
 	@ManyToOne
 	@JoinColumn(name = "ticket_category_id")
-	private TicketCategory category;
+	private TicketCategoryEntity category;
 	
 	@Column(name = "description")
 	private String description;
@@ -47,20 +65,19 @@ public class Ticket {
 	@SuppressWarnings("unused")
 	private void setId(Long id) { this.id = id; }
 	
-	public TicketStatus getStatus() { return status; }
+	public TicketStatusEntity getStatus() { return status; }
 	
-	public void setStatus(TicketStatus status) { this.status = status; }
+	public void setStatus(TicketStatusEntity status) { this.status = status; }
 
-	@NotNull
 	@Size(min = 1, max = 20)
 	public String getCustomerUsername() { return customerUsername; }
 	
 	public void setCustomerUsername(String customerUsername) { this.customerUsername = customerUsername; }
 	
 	@NotNull
-	public TicketCategory getCategory() { return category; }
+	public TicketCategoryEntity getCategory() { return category; }
 	
-	public void setCategory(TicketCategory category) { this.category = category; }
+	public void setCategory(TicketCategoryEntity category) { this.category = category; }
 	
 	@NotNull
 	@Size(min = 1, max = 4000)
@@ -91,7 +108,7 @@ public class Ticket {
 		if (obj == null) { return false; }
 		if (getClass() != obj.getClass()) { return false; }
 		
-		Ticket other = (Ticket) obj;
+		TicketEntity other = (TicketEntity) obj;
 		
 		if (category == null) {
 			if (other.category != null) { return false; }
