@@ -123,7 +123,7 @@ public class TicketController implements InitializingBean {
 	}
 	
 	private String prepareNewTicketForm(Model model) {
-		model.addAttribute(ModelKeys.TICKETS, ticketCategoryRepo.findAll());
+		model.addAttribute(ModelKeys.TICKET_CATEGORIES, ticketCategoryRepo.findAll());
 		return ViewKeys.NEW_TICKET;
 	}
 	
