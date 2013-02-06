@@ -1,6 +1,7 @@
 package com.springinpractice.ch13.helpdesk.integration.transformer;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
+import com.springinpractice.ch13.cdm.Customer;
 import com.springinpractice.ch13.cdm.Ticket;
 import com.springinpractice.ch13.cdm.TicketCategory;
 import com.springinpractice.ch13.cdm.TicketStatus;
@@ -53,7 +55,17 @@ public class TicketTransformer {
 	public TicketEntity toEntity(Ticket ticketDto) {
 		TicketEntity ticketEntity = new TicketEntity();
 		ticketEntity.setCategory(ticketCategoryTransformer.toEntity(ticketDto.getCategory()));
-		ticketEntity.setCustomerUsername(ticketDto.getCreatedBy());
+		
+		// We do either (1) the username or else (2) the e-mail and full name, but not both.
+		Customer customerDto = ticketDto.getCreatedBy();
+		String username = customerDto.getUsername();
+		if (username != null) {
+			ticketEntity.setCustomerUsername(username);
+		} else {
+			ticketEntity.setCustomerEmail(customerDto.getEmail());
+			ticketEntity.setCustomerFullName(getFullName(customerDto));
+		}
+		
 		ticketEntity.setDateCreated(ticketDto.getDateCreated());
 		ticketEntity.setDescription(ticketDto.getDescription());
 		ticketEntity.setStatus(ticketStatusTransformer.toEntity(ticketDto.getStatus()));
@@ -64,7 +76,20 @@ public class TicketTransformer {
 	public MailMessage toMailMessage(Ticket ticketDto) {
 		MailMessage msg = new SimpleMailMessage();
 		
-		// TODO Need customer e-mail address.
+		Customer customerDto = ticketDto.getCreatedBy();
+		String customerFullName = getFullName(customerDto);
+		String customerEmail = customerDto.getEmail();
+		String to = (customerFullName == null ? customerEmail : customerFullName + " <" + customerEmail + ">");
+		msg.setTo(to);
+		
+		msg.setFrom(confirmationFrom);
+		msg.setSubject(confirmationSubject);
+		msg.setSentDate(new Date());
+		
+		// In real life, use a template engine here (e.g., Velocity, Freemarker)
+		String desc = "Thank you for reporting this issue. We will contact you within one business day." +
+				"\n\nYour message:\n\n" + ticketDto.getDescription();
+		msg.setText(desc);
 		
 		return msg;
 	}
@@ -79,12 +104,27 @@ public class TicketTransformer {
 		
 		Ticket ticketDto = new Ticket();
 		ticketDto.setCategory(generalCategoryDto);
+		
+		// We don't really know whether the personal name is first, last or what, so just use the last name for now.
+		Customer customerDto = new Customer();
+		customerDto.setEmail(from.getAddress());
+		customerDto.setFirstName(null);
+		customerDto.setLastName(from.getPersonal());
+		ticketDto.setCreatedBy(customerDto);
+		
 		ticketDto.setDateCreated(email.getSentDate());
-		ticketDto.setDescription(
-				"From: " + from.getPersonal() + " <" + from.getAddress() + ">" +
-				"\nSubject: " + email.getSubject() +
-				"\n\n" + body.getContent());
+		ticketDto.setDescription("[" + email.getSubject() + "] " + body.getContent());
 		ticketDto.setStatus(openStatusDto);
 		return ticketDto;
+	}
+	
+	private String getFullName(Customer customerDto) {
+		String firstName = customerDto.getFirstName();
+		String lastName = customerDto.getLastName();
+		if (firstName == null) {
+			return (lastName == null ? "[Unknown]" : lastName).trim();
+		} else {
+			return (lastName == null ? firstName : firstName + " " + lastName).trim();
+		}
 	}
 }

@@ -8,8 +8,8 @@
 <section>
 	<table class="table">
 		<colgroup>
-			<col span="1" style="width: 15%" />
-			<col span="1" style="width: 75%" />
+			<col span="1" style="width: 25%" />
+			<col span="1" style="width: 65%" />
 			<col span="1" style="width: 10%" />
 		</colgroup>
 		<%--
@@ -30,16 +30,18 @@
 			<td class="actions"></td>
 		</tr>
 		<tr>
-			<td class="field-label">Customer</td>
-			<td>
-				<span class="iconx user"><c:out value="${customer.firstNameLastName}" /></span>
-				[<c:out value="${customer.username}" />]
-			</td>
-			<td class="actions"><a href="#">Edit</a></td>
+			<td class="field-label">Customer username</td>
+			<td><c:out value="${ticket.customerUsername}" /></td>
+			<td class="actions"></td>
+		</tr>
+		<tr>
+			<td class="field-label">Customer full name</td>
+			<td><span class="iconx user"><c:out value="${ticket.customerFullName}" /></span></td>
+			<td class="actions"></td>
 		</tr>
 		<tr>
 			<td class="field-label">Customer e-mail</td>
-			<td><span class="iconx mail"><a href="mailto:${customer.email}"><c:out value="${customer.email}" /></a></span></td>
+			<td><span class="iconx mail"><a href="mailto:<c:out value="${ticket.customerEmail}" />"><c:out value="${ticket.customerEmail}" /></a></span></td>
 			<td class="actions"></td>
 		</tr>
 		<tr>

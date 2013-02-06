@@ -17,6 +17,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>
+ * The idea behind the customer-related fields in this class is as follows. If the username is available (e.g., an
+ * authenticated user submits a ticket), then we leave the e-mail address and full name blank, and look those up from
+ * the portal whenever we need them. That way we don't have to worry about keeping the e-mail and full name in sync
+ * with the authoritative customer data. If the username is *not* available (e.g., customer submitted an e-mail), then
+ * we leave the username blank, and we store the customer's e-mail address and (if available) full name.
+ * </p>
+ * <p>
+ * For right now all tickets have usernames, but in recipe 13.5 we'll have tickets from an e-mail channel where no
+ * username is available. Indeed the customer may be a prospective customer with no account and hence no username.
+ * </p>
+ * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @Entity
@@ -35,6 +47,12 @@ public class TicketEntity {
 	
 	@Column(name = "customer_username")
 	private String customerUsername;
+	
+	@Column(name = "customer_email")
+	private String customerEmail;
+	
+	@Column(name = "customer_full_name")
+	private String customerFullName;
 	
 	@ManyToOne
 	@JoinColumn(name = "ticket_category_id")
@@ -55,7 +73,6 @@ public class TicketEntity {
 	
 	public void setStatus(TicketStatusEntity status) { this.status = status; }
 
-//	@NotNull
 	@Size(min = 1, max = 20)
 	public String getCustomerUsername() { return customerUsername; }
 	
@@ -64,7 +81,17 @@ public class TicketEntity {
 		this.customerUsername = customerUsername;
 	}
 	
-//	@NotNull
+	@Size(min = 1, max = 80)
+	public String getCustomerEmail() { return customerEmail; }
+	
+	public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+	
+	@Size(min = 1, max = 80)
+	public String getCustomerFullName() { return customerFullName; }
+	
+	public void setCustomerFullName(String customerFullName) { this.customerFullName = customerFullName; }
+	
+	@NotNull
 	public TicketCategoryEntity getCategory() { return category; }
 	
 	public void setCategory(TicketCategoryEntity category) { this.category = category; }

@@ -39,7 +39,7 @@
 	<context:property-placeholder location="classpath:/spring/environment.properties" />
 	
 	<!-- Recipe 13.5 -->
-	<jee:jndi-lookup id="mailSession" jndi-name="mail/Session" resource-ref="true" />
+	<jee:jndi-lookup id="mailSession" jndi-name="mail/Sip13HelpDeskMailSession" resource-ref="true" />
 	
 	<!-- Recipe 13.5 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" p:session-ref="mailSession" />
@@ -102,15 +102,14 @@
 	<!-- openssl s_client -connect imap.gmail.com:993 > gmail-imap.cer -->
 	
 	<!-- Use this if your provider supports IMAP IDLE. -->
-	<!-- IMPORTANT: To prevent accidental e-mail deletions, I've set "should-delete-messages" to false. But the correct
-	     configuration is "true". Note that once you set this true, this channel adapter will delete messages from the
-	     IMAP mailbox as it dequeues them. -->
 	<!-- DO NOT USE YOUR REAL E-MAIL ACCOUNT FOR THE STORE URI. USE A TEST ACCOUNT, OR YOU MAY END UP DELETING SEVERAL
 	     YEARS WORTH OF E-MAIL AS I DID. [WLW] -->
+	<!-- Set "should-delete-messages" to true. This channel adapter will delete messages from the IMAP mailbox as it
+	     dequeues them. -->
 	<int-mail:imap-idle-channel-adapter
 		channel="newMailChannel"
 		store-uri="${email.store.uri}"
-		should-delete-messages="false" />
+		should-delete-messages="${email.shouldDeleteMessages}" />
 	
 	<!-- Recipe 13.4 -->
 	<!-- Use this if your provider supports only plain IMAP. -->
@@ -118,7 +117,7 @@
 	<int-mail:inbound-channel-adapter
 		channel="newMailChannel"
 		store-uri="${email.store.uri}"
-		should-delete-messages="true">
+		should-delete-messages="${email.shouldDeleteMessages}">
 		<int:poller max-messages-per-poll="3" fixed-rate="30000" />
 	</int-mail:inbound-channel-adapter>
 	-->
