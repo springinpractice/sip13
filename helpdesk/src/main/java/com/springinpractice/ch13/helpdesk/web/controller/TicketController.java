@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springinpractice.ch13.helpdesk.integration.gateway.PortalGateway;
 import com.springinpractice.ch13.helpdesk.integration.resource.CustomerResource;
-import com.springinpractice.ch13.helpdesk.model.Ticket;
-import com.springinpractice.ch13.helpdesk.model.TicketStatus;
+import com.springinpractice.ch13.helpdesk.model.TicketEntity;
+import com.springinpractice.ch13.helpdesk.model.TicketStatusEntity;
 import com.springinpractice.ch13.helpdesk.model.TicketStatusKeys;
 import com.springinpractice.ch13.helpdesk.repo.TicketCategoryRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketRepository;
@@ -49,7 +49,7 @@ public class TicketController implements InitializingBean {
 	@Inject private TicketStatusRepository ticketStatusRepo;
 	@Inject private PortalGateway portalGateway;
 	
-	private TicketStatus openStatus;
+	private TicketStatusEntity openStatus;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -68,17 +68,17 @@ public class TicketController implements InitializingBean {
 	
 	@RequestMapping(value = "/tickets", method = RequestMethod.GET)
 	public String getTicketsHome(Model model) {
-		List<Ticket> tickets = ticketRepo.findAll();
-		model.addAttribute(tickets);
+		List<TicketEntity> tickets = ticketRepo.findAll();
+		model.addAttribute(ModelKeys.TICKETS, tickets);
 		model.addAttribute(ModelKeys.CUSTOMER_MAP, buildCustomerMap(tickets));
 		return ViewKeys.TICKETS_HOME;
 	}
 	
-	private Map<String, CustomerResource> buildCustomerMap(List<Ticket> tickets) {
+	private Map<String, CustomerResource> buildCustomerMap(List<TicketEntity> tickets) {
 		Map<String, CustomerResource> customerMap = new HashMap<String, CustomerResource>();
 		
 		List<String> usernames = new ArrayList<String>();
-		for (Ticket ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
+		for (TicketEntity ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
 		
 		Collection<CustomerResource> customers = portalGateway.findCustomersByUsernameIn(usernames);
 		for (CustomerResource customer : customers) { customerMap.put(customer.username, customer); }
@@ -93,12 +93,16 @@ public class TicketController implements InitializingBean {
 	
 	@RequestMapping(value = "/tickets/new", method = RequestMethod.GET)
 	public String getNewTicketForm(Model model) {
-		model.addAttribute(new Ticket());
+		model.addAttribute(ModelKeys.TICKET, new TicketEntity());
 		return prepareNewTicketForm(model);
 	}
 	
 	@RequestMapping(value = "/tickets", method = RequestMethod.POST)
-	public String postTicket(@ModelAttribute @Valid Ticket ticket, BindingResult result, Model model) {
+	public String postTicket(
+			@ModelAttribute(ModelKeys.TICKET) @Valid TicketEntity ticket,
+			BindingResult result,
+			Model model) {
+		
 		log.debug("Creating ticket: {}", ticket);
 		
 		// Additional customer username validation, if needed
@@ -119,20 +123,20 @@ public class TicketController implements InitializingBean {
 	}
 	
 	private String prepareNewTicketForm(Model model) {
-		model.addAttribute(ticketCategoryRepo.findAll());
+		model.addAttribute(ModelKeys.TICKETS, ticketCategoryRepo.findAll());
 		return ViewKeys.NEW_TICKET;
 	}
 	
 	
 	// =================================================================================================================
-	// Ticket details
+	// TicketEntity details
 	// =================================================================================================================
 	
 	@RequestMapping(value = "/tickets/{id}", method = RequestMethod.GET)
 	public String getTicketDetails(@PathVariable Long id, Model model) {
-		Ticket ticket = ticketRepo.findOne(id);
+		TicketEntity ticket = ticketRepo.findOne(id);
 		CustomerResource customer = portalGateway.findCustomerByUsername(ticket.getCustomerUsername());
-		model.addAttribute(ticket);
+		model.addAttribute(ModelKeys.TICKET, ticket);
 		model.addAttribute(ModelKeys.CUSTOMER, customer);
 		return ViewKeys.TICKET_DETAILS;
 	}

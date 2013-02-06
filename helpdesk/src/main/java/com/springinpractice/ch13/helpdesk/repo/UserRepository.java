@@ -3,13 +3,14 @@ package com.springinpractice.ch13.helpdesk.repo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.repository.annotation.RestResource;
 
-import com.springinpractice.ch13.helpdesk.model.User;
+import com.springinpractice.ch13.helpdesk.model.UserEntity;
 
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @RestResource(path = "users")
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	
-	User findByUsername(String username);
+	@RestResource(path = "find-by-username")
+	UserEntity findByUsername(String username);
 }

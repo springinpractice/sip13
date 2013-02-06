@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springinpractice.ch13.helpdesk.model.User;
+import com.springinpractice.ch13.helpdesk.model.UserEntity;
 import com.springinpractice.ch13.helpdesk.repo.UserRepository;
 import com.springinpractice.ch13.helpdesk.service.UserService;
 
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		log.debug("Loading user by username: {}", username);
-		User user = userRepo.findByUsername(username);
+		UserEntity user = userRepo.findByUsername(username);
 		if (user == null) { throw new UsernameNotFoundException(username); }
 		return user;
 	}
