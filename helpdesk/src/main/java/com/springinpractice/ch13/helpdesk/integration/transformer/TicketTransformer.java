@@ -15,7 +15,7 @@ public class TicketTransformer {
 	public TicketEntity toEntity(Ticket ticketDto) {
 		TicketEntity ticketEntity = new TicketEntity();
 		ticketEntity.setCategory(ticketCategoryTransformer.toEntity(ticketDto.getCategory()));
-		ticketEntity.setCustomerUsername(ticketDto.getCreatedBy());
+		ticketEntity.setCustomerUsername(ticketDto.getCreatedBy().getUsername());
 		ticketEntity.setDateCreated(ticketDto.getDateCreated());
 		ticketEntity.setDescription(ticketDto.getDescription());
 		ticketEntity.setStatus(ticketStatusTransformer.toEntity(ticketDto.getStatus()));

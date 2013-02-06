@@ -80,7 +80,7 @@ public class TicketController implements InitializingBean {
 		ticket.setStatus(status);
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ticket.setCreatedBy(user.getUsername());
+		ticket.setCreatedByUsername(user.getUsername());
 		ticket.setDateCreated(new Date());
 		
 		ticketGateway.createTicket(ticket);
