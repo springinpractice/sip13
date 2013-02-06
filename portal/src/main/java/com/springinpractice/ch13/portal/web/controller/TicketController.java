@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.springinpractice.ch13.cdm.Customer;
 import com.springinpractice.ch13.cdm.Ticket;
 import com.springinpractice.ch13.cdm.TicketCategory;
 import com.springinpractice.ch13.cdm.TicketStatus;
@@ -80,7 +81,9 @@ public class TicketController implements InitializingBean {
 		ticket.setStatus(status);
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ticket.setCreatedByUsername(user.getUsername());
+		Customer customer = new Customer();
+		customer.setUsername(user.getUsername());
+		ticket.setCreatedBy(customer);
 		ticket.setDateCreated(new Date());
 		
 		ticketGateway.createTicket(ticket);
