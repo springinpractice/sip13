@@ -39,7 +39,15 @@ public class CustomerEntity {
 	
 	public String getLastName() { return lastName; }
 	
-	public String getFirstNameLastName() { return firstName + " " + lastName; }
+	public String getFirstNameLastName() {
+		String fullName = null;
+		if (firstName == null) {
+			fullName = (lastName == null ? "[Unknown]" : lastName);
+		} else {
+			fullName = (lastName == null ? firstName : firstName + " " + lastName);
+		}
+		return fullName.trim();
+	}
 	
 	public String getEmail() { return email; }
 }

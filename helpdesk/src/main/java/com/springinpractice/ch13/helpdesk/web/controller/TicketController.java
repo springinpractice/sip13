@@ -68,8 +68,19 @@ public class TicketController implements InitializingBean {
 	@RequestMapping(value = "/tickets", method = RequestMethod.GET)
 	public String getTicketsHome(Model model) {
 		List<TicketEntity> tickets = ticketRepo.findAll();
+		
+		// Now we're using the tickets as DTOs for the JSP. So populate them with customer info for rendering.
+		Map<String, CustomerEntity> customerMap = buildCustomerMap(tickets);
+		for (TicketEntity ticket : tickets) {
+			String username = ticket.getCustomerUsername();
+			if (username != null) {
+				CustomerEntity customer = customerMap.get(username);
+				ticket.setCustomerEmail(customer.getEmail());
+				ticket.setCustomerFullName(customer.getFirstNameLastName());
+			}
+		}
+		
 		model.addAttribute(ModelKeys.TICKETS, tickets);
-		model.addAttribute(ModelKeys.CUSTOMER_MAP, buildCustomerMap(tickets));
 		return ViewKeys.TICKETS_HOME;
 	}
 	
@@ -77,7 +88,11 @@ public class TicketController implements InitializingBean {
 		Map<String, CustomerEntity> customerMap = new HashMap<String, CustomerEntity>();
 		
 		List<String> usernames = new ArrayList<String>();
-		for (TicketEntity ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
+		for (TicketEntity ticket : tickets) {
+			// Check for usernames, because tickets sent via e-mail don't have them. See recipe 13.4.
+			String username = ticket.getCustomerUsername();
+			if (username != null) { usernames.add(username); }
+		}
 		
 		List<CustomerEntity> customers = customerRepo.findByUsernameIn(usernames);
 		for (CustomerEntity customer : customers) { customerMap.put(customer.getUsername(), customer); }
@@ -135,8 +150,16 @@ public class TicketController implements InitializingBean {
 	@RequestMapping(value = "/tickets/{id}", method = RequestMethod.GET)
 	public String getTicketDetails(@PathVariable Long id, Model model) {
 		TicketEntity ticket = ticketRepo.findOne(id);
+		
+		// We do this because we have to handle the no-username case.
+		String username = ticket.getCustomerUsername();
+		if (username != null) {
+			CustomerEntity customer = customerRepo.findByUsername(username);
+			ticket.setCustomerEmail(customer.getEmail());
+			ticket.setCustomerFullName(customer.getFirstNameLastName());
+		}
+		
 		model.addAttribute(ModelKeys.TICKET, ticket);
-		model.addAttribute(ModelKeys.CUSTOMER, customerRepo.findByUsername(ticket.getCustomerUsername()));
 		return ViewKeys.TICKET_DETAILS;
 	}
 }
