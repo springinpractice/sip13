@@ -34,7 +34,6 @@
 				</thead>
 				<tbody>
 					<c:forEach var="ticket" items="${ticketList}">
-						<c:set var="customer" value="${customerMap[ticket.customerUsername]}" />
 						
 						<%-- FIXME Use JSP tag here so we can source URL from Sitemap --%>
 						<c:url var="ticketUrl" value="/tickets/${ticket.id}" />
@@ -46,7 +45,10 @@
 								</c:if>
 							</td>
 							<td><c:out value="${ticket.status.name}" /></td>
-							<td><c:out value="${customer.firstNameLastName}" /></td>
+							<td>
+								<c:out value="${ticket.customerFullName}" /><br />
+								<a href="mailto:<c:out value="${ticket.customerEmail}" />"><c:out value="${ticket.customerEmail}" /></a>
+							</td>
 							<td><c:out value="${ticket.category.name}" /></td>
 							<td>
 								<c:choose>

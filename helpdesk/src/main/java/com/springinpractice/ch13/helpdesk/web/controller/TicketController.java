@@ -69,8 +69,19 @@ public class TicketController implements InitializingBean {
 	@RequestMapping(value = "/tickets", method = RequestMethod.GET)
 	public String getTicketsHome(Model model) {
 		List<TicketEntity> tickets = ticketRepo.findAll();
+		
+		// Now we're using the tickets as DTOs for the JSP. So populate them with customer info for rendering.
+		Map<String, CustomerResource> customerMap = buildCustomerMap(tickets);
+		for (TicketEntity ticket : tickets) {
+			String username = ticket.getCustomerUsername();
+			if (username != null) {
+				CustomerResource customer = customerMap.get(username);
+				ticket.setCustomerEmail(customer.getEmail());
+				ticket.setCustomerFullName(customer.getFirstNameLastName());
+			}
+		}
+		
 		model.addAttribute(ModelKeys.TICKETS, tickets);
-		model.addAttribute(ModelKeys.CUSTOMER_MAP, buildCustomerMap(tickets));
 		return ViewKeys.TICKETS_HOME;
 	}
 	
@@ -78,7 +89,11 @@ public class TicketController implements InitializingBean {
 		Map<String, CustomerResource> customerMap = new HashMap<String, CustomerResource>();
 		
 		List<String> usernames = new ArrayList<String>();
-		for (TicketEntity ticket : tickets) { usernames.add(ticket.getCustomerUsername()); }
+		for (TicketEntity ticket : tickets) {
+			// Check for usernames, because tickets sent via e-mail don't have them. See recipe 13.4.
+			String username = ticket.getCustomerUsername();
+			if (username != null) { usernames.add(username); }
+		}
 		
 		Collection<CustomerResource> customers = portalGateway.findCustomersByUsernameIn(usernames);
 		for (CustomerResource customer : customers) { customerMap.put(customer.username, customer); }
@@ -136,11 +151,12 @@ public class TicketController implements InitializingBean {
 	public String getTicketDetails(@PathVariable Long id, Model model) {
 		TicketEntity ticket = ticketRepo.findOne(id);
 		
-		// Modified for recipe 13.4.
-		String customerUsername = ticket.getCustomerUsername();
-		if (customerUsername != null) {
-			CustomerResource customer = portalGateway.findCustomerByUsername(customerUsername);
-			model.addAttribute(ModelKeys.CUSTOMER, customer);
+		// We do this because we have to handle the no-username case.
+		String username = ticket.getCustomerUsername();
+		if (username != null) {
+			CustomerResource customer = portalGateway.findCustomerByUsername(ticket.getCustomerUsername());
+			ticket.setCustomerEmail(customer.getEmail());
+			ticket.setCustomerFullName(customer.getFirstNameLastName());
 		}
 		
 		model.addAttribute(ModelKeys.TICKET, ticket);
