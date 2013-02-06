@@ -1,0 +1,6 @@
+- Fix validation error message that results when submitting an empty ticket from the portal. Right now it says
+
+Failed to convert property value of type java.lang.String to required type org.springframework.hateoas.Link for property
+category; nested exception is org.springframework.core.convert.ConversionFailedException: Failed to convert from type
+java.lang.String to type @javax.validation.constraints.NotNull org.springframework.hateoas.Link for value '; nested
+exception is java.lang.IllegalArgumentException: Href must not be null or empty!

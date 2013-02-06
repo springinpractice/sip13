@@ -69,7 +69,7 @@ public class TicketController implements InitializingBean {
 	@RequestMapping(value = "/tickets", method = RequestMethod.GET)
 	public String getTicketsHome(Model model) {
 		List<TicketEntity> tickets = ticketRepo.findAll();
-		model.addAttribute("ticketList", tickets);
+		model.addAttribute(ModelKeys.TICKETS, tickets);
 		model.addAttribute(ModelKeys.CUSTOMER_MAP, buildCustomerMap(tickets));
 		return ViewKeys.TICKETS_HOME;
 	}
@@ -93,12 +93,16 @@ public class TicketController implements InitializingBean {
 	
 	@RequestMapping(value = "/tickets/new", method = RequestMethod.GET)
 	public String getNewTicketForm(Model model) {
-		model.addAttribute("ticket", new TicketEntity());
+		model.addAttribute(ModelKeys.TICKET, new TicketEntity());
 		return prepareNewTicketForm(model);
 	}
 	
 	@RequestMapping(value = "/tickets", method = RequestMethod.POST)
-	public String postTicket(@ModelAttribute @Valid TicketEntity ticket, BindingResult result, Model model) {
+	public String postTicket(
+			@ModelAttribute(ModelKeys.TICKET) @Valid TicketEntity ticket,
+			BindingResult result,
+			Model model) {
+		
 		log.debug("Creating ticket: {}", ticket);
 		
 		// Additional customer username validation, if needed
@@ -119,20 +123,20 @@ public class TicketController implements InitializingBean {
 	}
 	
 	private String prepareNewTicketForm(Model model) {
-		model.addAttribute("ticketCategoryList", ticketCategoryRepo.findAll());
+		model.addAttribute(ModelKeys.TICKETS, ticketCategoryRepo.findAll());
 		return ViewKeys.NEW_TICKET;
 	}
 	
 	
 	// =================================================================================================================
-	// Ticket details
+	// TicketEntity details
 	// =================================================================================================================
 	
 	@RequestMapping(value = "/tickets/{id}", method = RequestMethod.GET)
 	public String getTicketDetails(@PathVariable Long id, Model model) {
 		TicketEntity ticket = ticketRepo.findOne(id);
 		CustomerResource customer = portalGateway.findCustomerByUsername(ticket.getCustomerUsername());
-		model.addAttribute("ticket", ticket);
+		model.addAttribute(ModelKeys.TICKET, ticket);
 		model.addAttribute(ModelKeys.CUSTOMER, customer);
 		return ViewKeys.TICKET_DETAILS;
 	}
