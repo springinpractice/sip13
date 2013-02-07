@@ -81,13 +81,20 @@ public class TicketController implements InitializingBean {
 		ticket.setStatus(status);
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Customer customer = new Customer();
-		customer.setUsername(user.getUsername());
-		ticket.setCreatedBy(customer);
+		ticket.setCreatedBy(toCustomerDto(user));
 		ticket.setDateCreated(new Date());
 		
 		ticketGateway.createTicket(ticket);
 		return ViewKeys.REDIRECT_TO_HOME;
+	}
+	
+	private Customer toCustomerDto(User user) {
+		Customer customer = new Customer();
+		customer.setUsername(user.getUsername());
+		customer.setFirstName(user.getFirstName());
+		customer.setLastName(user.getLastName());
+		customer.setEmail(user.getEmail());
+		return customer;
 	}
 	
 	private String prepareNewTicketForm(Model model) {

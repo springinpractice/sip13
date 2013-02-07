@@ -73,7 +73,7 @@ public class TicketTransformer {
 	}
 	
 	// Recipe 13.5
-	public MailMessage toMailMessage(Ticket ticketDto) {
+	public MailMessage toConfirmationEmail(Ticket ticketDto) {
 		MailMessage msg = new SimpleMailMessage();
 		
 		Customer customerDto = ticketDto.getCreatedBy();
