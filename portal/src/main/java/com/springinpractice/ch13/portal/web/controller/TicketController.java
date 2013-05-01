@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springinpractice.ch13.cdm.Customer;
 import com.springinpractice.ch13.cdm.Ticket;
+import com.springinpractice.ch13.cdm.Ticket.CustomerGroup;
 import com.springinpractice.ch13.cdm.TicketCategory;
 import com.springinpractice.ch13.cdm.TicketStatus;
 import com.springinpractice.ch13.portal.integration.gateway.TicketGateway;
