@@ -9,5 +9,8 @@ package com.springinpractice.ch13.cdm;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
+ */
 @XmlRootElement
 public class DummyPayload { }
