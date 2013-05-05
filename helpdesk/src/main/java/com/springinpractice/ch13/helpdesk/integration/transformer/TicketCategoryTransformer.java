@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import com.springinpractice.ch13.cdm.TicketCategory;
 import com.springinpractice.ch13.helpdesk.model.TicketCategoryEntity;
 
+/**
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
+ */
 @Component
 public class TicketCategoryTransformer {
 	

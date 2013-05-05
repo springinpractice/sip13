@@ -29,6 +29,9 @@ import com.springinpractice.ch13.helpdesk.model.TicketStatusEntity;
 import com.springinpractice.ch13.helpdesk.repo.TicketCategoryRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketStatusRepository;
 
+/**
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
+ */
 @Component
 public class TicketTransformer {
 	@Inject private TicketCategoryRepository ticketCategoryRepo;
