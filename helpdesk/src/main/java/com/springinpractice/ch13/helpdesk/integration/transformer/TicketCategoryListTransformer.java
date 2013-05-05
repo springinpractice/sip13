@@ -1,3 +1,10 @@
+/* 
+ * Copyright (c) 2013 Manning Publications Co.
+ * 
+ * Book: http://manning.com/wheeler/
+ * Blog: http://springinpractice.com/
+ * Code: https://github.com/springinpractice
+ */
 package com.springinpractice.ch13.helpdesk.integration.transformer;
 
 import java.util.ArrayList;
@@ -11,6 +18,9 @@ import com.springinpractice.ch13.cdm.TicketCategory;
 import com.springinpractice.ch13.cdm.TicketCategory.TicketCategoryList;
 import com.springinpractice.ch13.helpdesk.model.TicketCategoryEntity;
 
+/**
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
+ */
 @Component
 public class TicketCategoryListTransformer {
 	@Inject private TicketCategoryTransformer categoryTransformer;

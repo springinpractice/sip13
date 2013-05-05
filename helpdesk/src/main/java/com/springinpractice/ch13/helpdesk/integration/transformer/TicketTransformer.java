@@ -1,3 +1,10 @@
+/* 
+ * Copyright (c) 2013 Manning Publications Co.
+ * 
+ * Book: http://manning.com/wheeler/
+ * Blog: http://springinpractice.com/
+ * Code: https://github.com/springinpractice
+ */
 package com.springinpractice.ch13.helpdesk.integration.transformer;
 
 import java.io.IOException;
@@ -26,6 +33,9 @@ import com.springinpractice.ch13.helpdesk.model.TicketStatusEntity;
 import com.springinpractice.ch13.helpdesk.repo.TicketCategoryRepository;
 import com.springinpractice.ch13.helpdesk.repo.TicketStatusRepository;
 
+/**
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
+ */
 @Component
 public class TicketTransformer {
 	@Inject private TicketCategoryRepository ticketCategoryRepo;
