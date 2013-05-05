@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import com.springinpractice.ch13.cdm.TicketStatus;
 import com.springinpractice.ch13.helpdesk.model.TicketStatusEntity;
 
+/**
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
+ */
 @Component
 public class TicketStatusTransformer {
 	

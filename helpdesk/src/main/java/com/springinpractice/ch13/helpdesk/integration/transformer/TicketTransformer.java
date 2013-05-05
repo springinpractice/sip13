@@ -15,6 +15,9 @@ import com.springinpractice.ch13.cdm.Customer;
 import com.springinpractice.ch13.cdm.Ticket;
 import com.springinpractice.ch13.helpdesk.model.TicketEntity;
 
+/**
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
+ */
 @Component
 public class TicketTransformer {
 	@Inject private TicketCategoryTransformer ticketCategoryTransformer;
